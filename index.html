@@ -122,6 +122,10 @@
   #kofi { display: block; margin-top: 8px; padding: 9px; border-radius: 10px; color: #fff; text-decoration: none; font-size: 13px;
     background: linear-gradient(90deg, #ff5e5b, #ff9a5b); box-shadow: 0 0 14px rgba(255,94,91,.5); }
   #kofi:hover { filter: brightness(1.15); }
+  #demoTag { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 4; pointer-events: none; padding: 6px 16px; border-radius: 20px;
+    font-size: 13px; color: #fff; background: rgba(10,5,25,.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.2); opacity: 0; transition: opacity .6s; }
+  #demoTag.show { opacity: 1; }
   .pclose { float: right; position: sticky; top: 0; z-index: 2; width: 30px; height: 30px; padding: 0; margin: -6px -6px 0 0; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
   #toggle { transition: opacity .4s ease; }
@@ -135,6 +139,7 @@
 <body class="panel-open">
 <canvas id="c"></canvas>
 <div id="songfx"></div>
+<div id="demoTag"></div>
 <div id="inst" class="gone"><div class="box">
   <h2>📲 Instalar Akasha Visions</h2>
   <p id="instP"></p>
@@ -181,6 +186,7 @@
     <button id="btnLoad">📂 Cargar música</button>
     <button id="btnAudio">🎤 Micrófono</button>
     <button id="btnTab">🖥 Audio de pestaña</button>
+    <button id="btnDemo" class="wide">🎬 Demostración</button>
   </div>
 
   <div class="section">Herramientas</div>
@@ -217,7 +223,7 @@
 </div>
 <button id="toggle" title="Mostrar/ocultar panel (H)">⚙</button>
 
-<audio id="audio" preload="metadata"></audio>
+<audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
 <input type="file" id="file" accept="audio/*" multiple style="display:none">
 <div id="dock" class="off">
   <div id="plist">
@@ -688,7 +694,7 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🙈 Auto-ocultar':'🙈 Auto-hide','Ocultar':'Hide','Ocultar panel':'Hide panel','🧊 Esponja de Menger':'🧊 Menger Sponge','Paleta':'Palette',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🎬 Demostración':'🎬 Demo','⏹ Detener demo':'⏹ Stop demo','No se pudo cargar la canción de la demo. Revisa tu conexión.':'Could not load the demo song. Check your connection.','🙈 Auto-ocultar':'🙈 Auto-hide','Ocultar':'Hide','Ocultar panel':'Hide panel','🧊 Esponja de Menger':'🧊 Menger Sponge','Paleta':'Palette',
  'Movimiento':'Motion','Geometría':'Geometry','Sistema':'System','Herramientas':'Tools','Acciones':'Actions',
  'Velocidad':'Speed','Rotación':'Rotation','Pulso':'Pulse','Caleidoscopio':'Kaleidoscope','Complejidad':'Complexity',
  'Distorsión':'Distortion','Tono':'Hue','Ciclo de color':'Color cycle','Saturación':'Saturation','Brillo':'Brightness',
@@ -1192,6 +1198,60 @@ document.getElementById('btnGyro').onclick = e => toggleGyro(e.currentTarget);
 document.getElementById('btnSafe').onclick = () => setSafe(!safe);
 document.getElementById('wSafe').onclick = () => { setSafe(true); document.getElementById('warn').classList.add('gone'); };
 document.getElementById('wGo').onclick = () => document.getElementById('warn').classList.add('gone');
+// --- Demostración: recorre los 12 modos al ritmo de la canción ---
+const DEMO_URL = 'https://raw.githubusercontent.com/HighDimensionApps/Akasha-Visions/main/Calma%20Profunda.mp3';
+const DEMO = [
+  { pal: 6, cfg: { mode: 11, speed: 0.8, rotation: 0.02, zoom: 1,   pulse: 0.1,  segments: 1,  iter: 4, distort: 0,   hue: 0.6,  cspeed: 0.08, sat: 1.2, bright: 1.1,  trail: 0.5 } },
+  { pal: 8, cfg: { mode: 3,  speed: 0.5, rotation: 0.08, zoom: 1.2, pulse: 0.2,  segments: 12, iter: 5, distort: 0.1, hue: 0.85, cspeed: 0.12, sat: 1.1, bright: 1,    trail: 0.35 } },
+  { pal: 1, cfg: { mode: 7,  speed: 0.5, rotation: 0.04, zoom: 1,   pulse: 0.1,  segments: 1,  iter: 4, distort: 0,   hue: 0.1,  cspeed: 0.1,  sat: 1.2, bright: 1.1,  trail: 0.4 } },
+  { pal: 0, cfg: { mode: 0,  speed: 0.6, rotation: 0.05, zoom: 1,   pulse: 0.1,  segments: 8,  iter: 4, distort: 0.2, hue: 0.7,  cspeed: 0.2,  sat: 1.2, bright: 1,    trail: 0.3 } },
+  { pal: 3, cfg: { mode: 4,  speed: 0.6, rotation: 0.03, zoom: 1,   pulse: 0.1,  segments: 1,  iter: 5, distort: 0,   hue: 0.5,  cspeed: 0.12, sat: 1.2, bright: 1.1,  trail: 0.3 } },
+  { pal: 5, cfg: { mode: 1,  speed: 0.7, rotation: 0,    zoom: 0.9, pulse: 0.2,  segments: 1,  iter: 5, distort: 0.4, hue: 0,    cspeed: 0.1,  sat: 1.4, bright: 1.15, trail: 0.2 } },
+  { pal: 8, cfg: { mode: 9,  speed: 0.8, rotation: 0,    zoom: 1,   pulse: 0.2,  segments: 1,  iter: 6, distort: 0.1, hue: 0,    cspeed: 0.1,  sat: 1.4, bright: 1.1,  trail: 0.2 } },
+  { pal: 6, cfg: { mode: 6,  speed: 0.7, rotation: 0.03, zoom: 1,   pulse: 0.15, segments: 1,  iter: 5, distort: 0.1, hue: 0.4,  cspeed: 0.1,  sat: 1.2, bright: 1.1,  trail: 0.25 } },
+  { pal: 2, cfg: { mode: 5,  speed: 0.8, rotation: 0,    zoom: 1,   pulse: 0.1,  segments: 1,  iter: 4, distort: 0,   hue: 0.3,  cspeed: 0.15, sat: 1.2, bright: 1.1,  trail: 0.3 } },
+  { pal: 0, cfg: { mode: 10, speed: 1,   rotation: 0,    zoom: 1,   pulse: 0.1,  segments: 1,  iter: 5, distort: 0,   hue: 0.5,  cspeed: 0.25, sat: 1.3, bright: 1,    trail: 0.4 } },
+  { pal: 8, cfg: { mode: 2,  speed: 1.2, rotation: 0.2,  zoom: 1,   pulse: 0.3,  segments: 6,  iter: 3, distort: 0.3, hue: 0.5,  cspeed: 0.3,  sat: 1.3, bright: 1.1,  trail: 0.3 } },
+  { pal: 6, cfg: { mode: 8,  speed: 0.8, rotation: 0,    zoom: 1,   pulse: 0.1,  segments: 1,  iter: 4, distort: 0,   hue: 0,    cspeed: 0.1,  sat: 1.2, bright: 1.1,  trail: 0.3 } },
+];
+let demo = false, demoScene = -1, demoWasAuto = false, demoTagT = 0;
+const btnDemo = document.getElementById('btnDemo'), demoTag = document.getElementById('demoTag');
+function applyScene(i){
+  demoScene = i; const s = DEMO[i];
+  setPal(s.pal); applyConfig(s.cfg);
+  demoTag.textContent = '🎬 ' + modeSel.options[s.cfg.mode].text + '  ·  ' + (i + 1) + '/' + DEMO.length;
+  demoTag.classList.add('show'); clearTimeout(demoTagT); demoTagT = setTimeout(() => demoTag.classList.remove('show'), 3500);
+}
+function startDemo(){
+  let idx = tracks.findIndex(t => t.url === DEMO_URL);
+  if (idx < 0) { tracks.push({ name: 'Calma Profunda', url: DEMO_URL }); idx = tracks.length - 1; renderList(); }
+  playIndex(idx);
+  demo = true; demoScene = -1; demoWasAuto = autoMutate;
+  if (autoMutate) toggleAuto();
+  if (dock.classList.contains('off')) toggleDock();
+  if (!panel.classList.contains('hidden')) togglePanel();      // deja la pantalla libre para ver las visuales
+  btnDemo.classList.add('active'); btnDemo.textContent = tr('⏹ Detener demo');
+  applyScene(0);
+}
+function stopDemo(pause){
+  if (!demo) return;
+  demo = false; demoScene = -1;
+  btnDemo.classList.remove('active'); btnDemo.textContent = tr('🎬 Demostración');
+  demoTag.classList.remove('show');
+  if (demoWasAuto && !autoMutate) toggleAuto();
+  if (pause) audioEl.pause();
+}
+function demoTick(){
+  if (!demo) return;
+  if (!tracks[cur] || tracks[cur].url !== DEMO_URL) { stopDemo(false); return; }   // se cambió de canción
+  const dur = isFinite(audioEl.duration) && audioEl.duration > 0 ? audioEl.duration : 240, seg = dur / DEMO.length;
+  const want = Math.min(DEMO.length - 1, Math.floor(audioEl.currentTime / seg));
+  // el cambio espera al siguiente beat (máx. 1.2 s) para caer en el ritmo
+  if (want !== demoScene && (beatFlag || audioEl.currentTime - want * seg > 1.2)) applyScene(want);
+}
+btnDemo.onclick = () => demo ? stopDemo(true) : startDemo();
+audioEl.addEventListener('error', () => { if (demo) { alert(tr('No se pudo cargar la canción de la demo. Revisa tu conexión.')); stopDemo(false); } });
+
 // --- Instalar como app (PWA) ---
 let deferredInstall = null;
 const btnInstall = document.getElementById('btnInstall');
@@ -1277,6 +1337,7 @@ function frame(now){
   }
 
   updateAudio(dt, now);
+  demoTick();
   const rx = P.react * (safe ? 0.3 : 1);
   if (gyroOn && !dragging) { offset[0] += (gyroT[0] * 0.8 - offset[0]) * 0.1; offset[1] += (gyroT[1] * 0.8 - offset[1]) * 0.1; }
   rips.forEach((r, i) => { if (r.t >= 0) { r.t += dt; if (r.t > 3) r.t = -1; } ripArr[i * 3] = r.x; ripArr[i * 3 + 1] = r.y; ripArr[i * 3 + 2] = r.t; });
