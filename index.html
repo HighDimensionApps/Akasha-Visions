@@ -129,6 +129,16 @@
   .phead { position: sticky; top: -16px; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 8px;
     margin: -16px -16px 8px; padding: 12px 16px 8px; border-radius: 16px 16px 0 0; background: rgba(14, 6, 34, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .phead h1 { margin: 0; font-size: 14px; white-space: nowrap; letter-spacing: 1px; }
+  .hint { font-size: 11px; color: #aaa; line-height: 1.5; margin-top: 6px; }
+  #audioIn { margin-top: 8px; }
+  .prow { display: flex; gap: 6px; margin-top: 8px; }
+  .prow input { flex: 1; min-width: 0; padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.35); color: #fff; font-size: 12px; }
+  .prow button { flex: none; padding: 8px 10px; }
+  .upl { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .upl .none { font-size: 11px; color: #999; padding: 2px 4px; }
+  .up { display: flex; gap: 4px; }
+  .up .upb { flex: 1; min-width: 0; text-align: left; padding: 6px 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .up .upx { flex: none; width: 30px; padding: 6px 0; }
   .pclose { width: 30px; height: 30px; padding: 0; flex: none; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
   #toggle { transition: opacity .4s ease; }
@@ -182,14 +192,26 @@
   <div class="section">Presets</div>
   <div class="btns three" id="presets"></div>
 
+  <div class="section">Mis presets</div>
+  <div class="prow"><input id="upName" type="text" maxlength="24" placeholder="Nombre del preset…"><button id="upSave">💾 Guardar</button></div>
+  <div class="upl" id="userPresets"></div>
+
+  <div class="section">Presets MIDI</div>
+  <div class="prow"><input id="mpName" type="text" maxlength="24" placeholder="Nombre del mapeo…"><button id="mpSave">💾 Guardar</button></div>
+  <div class="upl" id="midiPresets"></div>
+  <div class="btns three"><button id="mpClear">🧹 Limpiar</button><button id="upExport">⬇ Exportar</button><button id="upImport">⬆ Importar</button></div>
+  <input type="file" id="upFile" accept=".json,application/json" style="display:none">
+
   <div class="section">Audio</div>
   <div class="btns">
     <button id="btnPlayer">🎵 Reproductor</button>
     <button id="btnLoad">📂 Cargar música</button>
-    <button id="btnAudio">🎤 Micrófono</button>
-    <button id="btnTab">🖥 Audio de pestaña</button>
+    <button id="btnAudio">🎤 Entrada de audio</button>
+    <button id="btnTab">🖥 Audio del PC</button>
     <button id="btnDemo" class="wide">🎬 Demostración</button>
   </div>
+  <select id="audioIn" title="Entrada de audio"></select>
+  <div class="hint" data-en="To capture all PC audio: press “PC audio”, choose “Entire screen” and tick “Share system audio” (Windows/ChromeOS). On Mac or Linux use a virtual cable (BlackHole, VB-Cable) and pick it above.">Para capturar todo el audio del PC: pulsa «Audio del PC», elige «Pantalla completa» y activa «Compartir audio del sistema» (Windows/ChromeOS). En Mac o Linux usa un cable virtual (BlackHole, VB-Cable) y elígelo arriba.</div>
 
   <div class="section">Herramientas</div>
   <div class="btns">
@@ -199,6 +221,7 @@
     <button id="btnGyro">📱 Giroscopio</button>
     <button id="btnAutoUI" class="active">🙈 Auto-ocultar</button>
     <button id="btnInstall">📲 Instalar app</button>
+    <button id="btnSecond" class="wide">🪟 Segunda pantalla</button>
   </div>
 
   <div class="section">Acciones</div>
@@ -696,20 +719,23 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🎬 Demostración':'🎬 Demo','⏹ Detener demo':'⏹ Stop demo','No se pudo cargar la canción de la demo. Revisa tu conexión.':'Could not load the demo song. Check your connection.','🙈 Auto-ocultar':'🙈 Auto-hide','Ocultar':'Hide','Ocultar panel':'Hide panel','🧊 Esponja de Menger':'🧊 Menger Sponge','Paleta':'Palette',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','Mis presets':'My presets','Presets MIDI':'MIDI presets','💾 Guardar':'💾 Save','🧹 Limpiar':'🧹 Clear','⬇ Exportar':'⬇ Export','⬆ Importar':'⬆ Import',
+ 'Nombre del preset…':'Preset name…','Nombre del mapeo…':'Mapping name…','Todavía no hay presets guardados':'No saved presets yet','Sin mapeos MIDI guardados':'No saved MIDI mappings',
+ 'Borrar':'Delete','¿Borrar ':'Delete ','Presets importados: ':'Presets imported: ','El archivo no es válido.':'The file is not valid.',
+ 'Aún no has asignado controles MIDI (doble clic en un slider y mueve una perilla).':'You have not assigned any MIDI controls yet (double-click a slider, then move a knob).','🎬 Demostración':'🎬 Demo','⏹ Detener demo':'⏹ Stop demo','No se pudo cargar la canción de la demo. Revisa tu conexión.':'Could not load the demo song. Check your connection.','🙈 Auto-ocultar':'🙈 Auto-hide','Ocultar':'Hide','Ocultar panel':'Hide panel','🧊 Esponja de Menger':'🧊 Menger Sponge','Paleta':'Palette',
  'Movimiento':'Motion','Geometría':'Geometry','Sistema':'System','Herramientas':'Tools','Acciones':'Actions',
  'Velocidad':'Speed','Rotación':'Rotation','Pulso':'Pulse','Caleidoscopio':'Kaleidoscope','Complejidad':'Complexity',
  'Distorsión':'Distortion','Tono':'Hue','Ciclo de color':'Color cycle','Saturación':'Saturation','Brillo':'Brightness',
  'Estela':'Feedback trail','Sensibilidad audio':'Audio sensitivity','Fuerza de reacción':'Reaction strength','Resolución':'Resolution',
  '🔮 Místico':'🔮 Mystic','🔥 Fuego':'🔥 Fire','🚀 Hiper':'🚀 Hyper','🌸 Loto':'🌸 Lotus','🧊 Hielo':'🧊 Ice',
  '🌈 Arcoíris':'🌈 Rainbow','🌅 Atardecer':'🌅 Sunset','☢️ Tóxico':'☢️ Toxic','⚫ Monocromo':'⚫ Monochrome','🌊 Océano':'🌊 Ocean','🍬 Pastel':'🍬 Candy','💜 Neón':'💜 Neon',
- '🎵 Reproductor':'🎵 Player','📂 Cargar música':'📂 Load music','🎤 Micrófono':'🎤 Microphone','🖥 Audio de pestaña':'🖥 Tab audio',
+ '🎵 Reproductor':'🎵 Player','📂 Cargar música':'📂 Load music','🎤 Entrada de audio':'🎤 Audio input','🎤 Entrada predeterminada':'🎤 Default input','Entrada ':'Input ','🖥 Audio del PC':'🖥 PC audio','🪟 Segunda pantalla':'🪟 Second screen','⏹ Cerrar segunda pantalla':'⏹ Close second screen','El navegador bloqueó la ventana emergente. Permite las ventanas emergentes para esta página.':'The browser blocked the pop-up. Allow pop-ups for this page.',
  '🎲 Aleatorio':'🎲 Random','⏸ Pausa':'⏸ Pause','▶ Seguir':'▶ Resume','🔄 Auto-mutar':'🔄 Auto-mutate','📸 Captura':'📸 Screenshot','⛶ Pantalla':'⛶ Fullscreen',
  '⏺ Grabar video':'⏺ Record video','⏹ Detener grabación':'⏹ Stop recording','⚡ Resolución auto':'⚡ Auto resolution','📱 Giroscopio':'📱 Gyroscope','🛡 Modo seguro':'🛡 Safe mode',
  'Arrastra canciones aquí o pulsa ＋':'Drop songs here or press ＋','Lista de reproducción':'Playlist','Vaciar':'Clear','Todavía no hay canciones':'No songs yet','No se pudo reproducir: ':'Could not play: ',
  'Aleatorio':'Shuffle','Anterior (B)':'Previous (B)','Reproducir / pausa (P)':'Play / pause (P)','Siguiente (N)':'Next (N)','Repetir':'Repeat','Lista':'List','Añadir canciones':'Add songs','Mostrar/ocultar panel (H)':'Show/hide panel (H)',
  'Suelta tus canciones aquí':'Drop your songs here','⚠ Aviso de fotosensibilidad':'⚠ Photosensitivity warning','Activar modo seguro':'Enable safe mode','Continuar':'Continue','☕ Invítame un café':'☕ Buy me a coffee',
- 'No se pudo acceder al micrófono: ':'Could not access the microphone: ','No se compartió audio. Elige una pestaña y activa "Compartir audio de la pestaña".':'No audio was shared. Pick a tab and enable "Share tab audio".',
+ 'No se pudo acceder al micrófono: ':'Could not access the microphone: ','No se compartió audio. Para todo el audio del PC elige "Pantalla completa" y activa "Compartir audio del sistema"; para una sola pestaña activa "Compartir audio de la pestaña".':'No audio was shared. For all PC audio choose "Entire screen" and tick "Share system audio"; for a single tab tick "Share tab audio".',
  'No se pudo capturar el audio: ':'Could not capture audio: ','Tu navegador no soporta Web MIDI (usa Chrome o Edge).':'Your browser does not support Web MIDI (use Chrome or Edge).',
  'Tu navegador no puede grabar video.':'Your browser cannot record video.','No se pudo activar el giroscopio.':'Could not enable the gyroscope.'
 };
@@ -774,22 +800,38 @@ function updateAudio(dt, now){
   beat *= Math.exp(-dt * 5);
 }
 
-// --- Micrófono ---
+// --- Entrada de audio (micrófono, interfaz, línea, cable virtual...) ---
 let micStream = null, micNode = null;
-async function toggleMic(btn){
-  if (micNode) {
-    micNode.disconnect(); micStream.getTracks().forEach(t => t.stop());
-    micNode = micStream = null; btn.classList.remove('active'); return;
-  }
+const audioInSel = document.getElementById('audioIn');
+async function refreshInputs(){
+  try {
+    const cur = audioInSel.value;
+    const devs = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput');
+    audioInSel.innerHTML = '';
+    audioInSel.add(new Option(tr('🎤 Entrada predeterminada'), ''));
+    devs.forEach((d, i) => { if (d.deviceId && d.deviceId !== 'default' && d.deviceId !== 'communications') audioInSel.add(new Option(d.label || (tr('Entrada ') + (i + 1)), d.deviceId)); });
+    if ([...audioInSel.options].some(o => o.value === cur)) audioInSel.value = cur;
+  } catch (e) {}
+}
+function stopMic(btn){
+  if (micNode) micNode.disconnect();
+  if (micStream) micStream.getTracks().forEach(t => t.stop());
+  micNode = micStream = null; btn.classList.remove('active');
+}
+async function startMic(btn){
   try {
     ensureCtx();
-    micStream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    const id = audioInSel.value;
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: { ...(id ? { deviceId: { exact: id } } : {}), echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
     micNode = actx.createMediaStreamSource(micStream);
-    micNode.connect(analyser); micNode.connect(recDest);                 // sin conectar a la salida: evita el acople
-    btn.classList.add('active');
+    micNode.connect(analyser); micNode.connect(recDest);       // sin conectar a la salida: evita el acople
+    btn.classList.add('active'); refreshInputs();               // con permiso ya se ven los nombres de los dispositivos
   } catch (e) { alert(tr('No se pudo acceder al micrófono: ') + e.message); }
 }
+function toggleMic(btn){ return micNode ? stopMic(btn) : startMic(btn); }
+audioInSel.onchange = async () => { if (micNode) { const btn = document.getElementById('btnAudio'); stopMic(btn); await startMic(btn); } };
+if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) navigator.mediaDevices.addEventListener('devicechange', refreshInputs);
+refreshInputs();
 
 // --- Audio de una pestaña (Spotify web, YouTube...) ---
 let tabStream = null, tabNode = null;
@@ -802,10 +844,10 @@ async function toggleTab(btn){
   if (tabNode) { stopTab(btn); return; }
   try {
     ensureCtx();
-    const s = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+    const s = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, systemAudio: 'include', selfBrowserSurface: 'exclude' });
     if (!s.getAudioTracks().length) {
       s.getTracks().forEach(t => t.stop());
-      alert(tr('No se compartió audio. Elige una pestaña y activa "Compartir audio de la pestaña".'));
+      alert(tr('No se compartió audio. Para todo el audio del PC elige "Pantalla completa" y activa "Compartir audio del sistema"; para una sola pestaña activa "Compartir audio de la pestaña".'));
       return;
     }
     s.getVideoTracks().forEach(t => t.stop());
@@ -1054,7 +1096,7 @@ document.getElementById('toggle').onclick = togglePanel;
 document.getElementById('panelClose').onclick = togglePanel;
 
 window.addEventListener('keydown', e => {
-  if (e.target.tagName === 'SELECT') return;
+  if (e.target.tagName === 'SELECT' || (e.target.tagName === 'INPUT' && e.target.type === 'text')) return;
   const k = e.key.toLowerCase();
   if (k === ' ') { e.preventDefault(); togglePause(); }
   else if (k === 'r') randomize();
@@ -1145,7 +1187,7 @@ function onMidi(m){
   if ((st & 0xF0) !== 0xB0) return;
   if (midiLearn) {
     for (const k in midiMap) if (midiMap[k] === midiLearn) delete midiMap[k];
-    midiMap[cc] = midiLearn; sliders[midiLearn].input.classList.remove('learn'); midiLearn = null; return;
+    midiMap[cc] = midiLearn; persistMidi(); sliders[midiLearn].input.classList.remove('learn'); midiLearn = null; return;
   }
   const id = midiMap[cc] || sliderIds[cc - 21]; if (!id) return;
   const d = sliders[id].def; let v = d.min + val / 127 * (d.max - d.min);
@@ -1188,6 +1230,7 @@ function applyLang(){
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
   let n; while ((n = w.nextNode())) { const v = n.nodeValue.trim(); if (map[v]) n.nodeValue = n.nodeValue.replace(v, map[v]); }
   document.querySelectorAll('[title]').forEach(e => { if (map[e.title]) e.title = map[e.title]; });
+  document.querySelectorAll('[placeholder]').forEach(e => { if (map[e.placeholder]) e.placeholder = map[e.placeholder]; });
   document.querySelectorAll('[data-en]').forEach(e => { if (!e.dataset.es) e.dataset.es = e.innerHTML; e.innerHTML = lang === 'en' ? e.dataset.en : e.dataset.es; });
   document.body.dataset.drop = tr('Suelta tus canciones aquí');
   document.getElementById('btnLang').textContent = lang === 'en' ? '🌐 Español' : '🌐 English';
@@ -1200,6 +1243,71 @@ document.getElementById('btnGyro').onclick = e => toggleGyro(e.currentTarget);
 document.getElementById('btnSafe').onclick = () => setSafe(!safe);
 document.getElementById('wSafe').onclick = () => { setSafe(true); document.getElementById('warn').classList.add('gone'); };
 document.getElementById('wGo').onclick = () => document.getElementById('warn').classList.add('gone');
+// --- Presets del usuario: visuales y MIDI (se guardan en el navegador) ---
+let store = { visual: {}, midi: {}, midiCur: {} };
+try { const s = JSON.parse(localStorage.getItem('akasha_presets_v1')); if (s) store = Object.assign(store, s); } catch (e) {}
+const saveStore = () => { try { localStorage.setItem('akasha_presets_v1', JSON.stringify(store)); } catch (e) {} };
+Object.assign(midiMap, store.midiCur);                       // recupera los controles MIDI ya asignados
+function persistMidi(){ store.midiCur = { ...midiMap }; saveStore(); }
+const savedIds = sliderIds.filter(id => id !== 'quality');   // la resolución depende del equipo, no se guarda
+const clamp = (id, v) => Math.min(sliders[id].def.max, Math.max(sliders[id].def.min, v));
+function snapshot(){ const cfg = {}; savedIds.forEach(id => cfg[id] = +(+P[id]).toFixed(3)); return { mode: P.mode, pal: palIdx, cfg }; }
+function loadVisual(pr){ setPal(pr.pal | 0); applyConfig({ mode: pr.mode, ...pr.cfg }); }
+function cleanVisual(v){
+  if (!v || typeof v !== 'object' || !Number.isFinite(v.mode)) return null;
+  const cfg = {}; savedIds.forEach(id => { const x = v.cfg && v.cfg[id]; if (Number.isFinite(x)) cfg[id] = clamp(id, x); });
+  return { mode: Math.max(0, Math.min(modeSel.options.length - 1, v.mode | 0)), pal: Math.max(0, Math.min(PALS.length - 1, v.pal | 0)), cfg };
+}
+function cleanMidi(m){
+  if (!m || typeof m !== 'object') return null;
+  const o = {}; for (const cc in m) if (+cc >= 0 && +cc <= 127 && sliderIds.includes(m[cc])) o[cc] = m[cc];
+  return o;
+}
+function fillList(id, obj, onLoad, onDel, emptyMsg){
+  const box = document.getElementById(id); box.innerHTML = '';
+  const names = Object.keys(obj);
+  if (!names.length) { const d = document.createElement('div'); d.className = 'none'; d.textContent = tr(emptyMsg); box.appendChild(d); return; }
+  names.forEach(n => {
+    const row = document.createElement('div'); row.className = 'up';
+    const b = document.createElement('button'); b.className = 'upb'; b.textContent = n; b.onclick = () => onLoad(n);
+    const x = document.createElement('button'); x.className = 'upx'; x.textContent = '✕'; x.title = tr('Borrar');
+    x.onclick = () => { if (confirm(tr('¿Borrar ') + '"' + n + '"?')) { onDel(n); saveStore(); renderLists(); } };
+    row.append(b, x); box.appendChild(row);
+  });
+}
+function renderLists(){
+  fillList('userPresets', store.visual, n => loadVisual(store.visual[n]), n => { delete store.visual[n]; }, 'Todavía no hay presets guardados');
+  fillList('midiPresets', store.midi, n => { for (const k in midiMap) delete midiMap[k]; Object.assign(midiMap, store.midi[n]); persistMidi(); }, n => { delete store.midi[n]; }, 'Sin mapeos MIDI guardados');
+}
+function readName(id){ const el = document.getElementById(id), n = el.value.trim().slice(0, 24); if (!n || n === '__proto__') { el.focus(); return null; } return { el, n }; }
+document.getElementById('upSave').onclick = () => { const r = readName('upName'); if (!r) return; store.visual[r.n] = snapshot(); saveStore(); renderLists(); r.el.value = ''; };
+document.getElementById('mpSave').onclick = () => {
+  if (!Object.keys(midiMap).length) { alert(tr('Aún no has asignado controles MIDI (doble clic en un slider y mueve una perilla).')); return; }
+  const r = readName('mpName'); if (!r) return; store.midi[r.n] = { ...midiMap }; saveStore(); renderLists(); r.el.value = '';
+};
+document.getElementById('mpClear').onclick = () => { for (const k in midiMap) delete midiMap[k]; persistMidi(); };
+['upName', 'mpName'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById(id === 'upName' ? 'upSave' : 'mpSave').click(); }));
+document.getElementById('upExport').onclick = () => {
+  const blob = new Blob([JSON.stringify({ app: 'Akasha Visions', version: 1, visual: store.visual, midi: store.midi }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'akasha_visions_presets.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+};
+document.getElementById('upImport').onclick = () => document.getElementById('upFile').click();
+document.getElementById('upFile').onchange = e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result); let n = 0;
+      for (const k in (d.visual || {})) { const v = cleanVisual(d.visual[k]); if (v && k !== '__proto__') { store.visual[k.slice(0, 24)] = v; n++; } }
+      for (const k in (d.midi || {})) { const m = cleanMidi(d.midi[k]); if (m && k !== '__proto__') { store.midi[k.slice(0, 24)] = m; n++; } }
+      saveStore(); renderLists(); alert(tr('Presets importados: ') + n);
+    } catch (err) { alert(tr('El archivo no es válido.')); }
+  };
+  r.readAsText(f);
+};
+renderLists();
+
 // --- Demostración: recorre los 12 modos al ritmo de la canción ---
 const DEMO_URL = 'https://raw.githubusercontent.com/HighDimensionApps/Akasha-Visions/main/Calma%20Profunda.mp3';
 const DEMO = [
@@ -1253,6 +1361,39 @@ function demoTick(){
 }
 btnDemo.onclick = () => demo ? stopDemo(true) : startDemo();
 audioEl.addEventListener('error', () => { if (demo) { alert(tr('No se pudo cargar la canción de la demo. Revisa tu conexión.')); stopDemo(false); } });
+
+// --- Segunda pantalla: una ventana que solo muestra las visuales ---
+let second = null, secondTimer = 0;
+const btnSecond = document.getElementById('btnSecond');
+function closeSecond(){
+  clearInterval(secondTimer);
+  if (second && !second.closed) second.close();
+  second = null; btnSecond.classList.remove('active'); btnSecond.textContent = tr('🪟 Segunda pantalla');
+}
+function openSecond(){
+  if (second && !second.closed) { closeSecond(); return; }
+  second = window.open('', 'akasha_second', 'popup=yes,width=1280,height=720');   // se abre ya, dentro del clic, para que no la bloquee el navegador
+  if (!second) { alert(tr('El navegador bloqueó la ventana emergente. Permite las ventanas emergentes para esta página.')); return; }
+  const hint = lang === 'en' ? 'Double-click: fullscreen' : 'Doble clic: pantalla completa';
+  const d = second.document; d.open();
+  d.write('<!doctype html><meta charset="utf-8"><title>Akasha Visions</title><style>html,body{margin:0;height:100%;background:#000;overflow:hidden}html:fullscreen{cursor:none}' +
+    'video{width:100%;height:100%;object-fit:contain;background:#000}#h{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);color:#fff;font:13px system-ui,sans-serif;' +
+    'background:rgba(0,0,0,.55);padding:8px 14px;border-radius:20px;transition:opacity 1s;pointer-events:none}</style><video autoplay muted playsinline></video><div id="h">' + hint + '</div>');
+  d.close();
+  d.querySelector('video').srcObject = canvas.captureStream(60);      // la misma imagen del canvas principal, sin controles
+  d.addEventListener('dblclick', () => { if (d.fullscreenElement) d.exitFullscreen(); else d.documentElement.requestFullscreen().catch(() => {}); });
+  setTimeout(() => { const h = d.getElementById('h'); if (h) h.style.opacity = 0; }, 6000);
+  btnSecond.classList.add('active'); btnSecond.textContent = tr('⏹ Cerrar segunda pantalla');
+  secondTimer = setInterval(() => { if (!second || second.closed) closeSecond(); }, 1000);
+  if (window.getScreenDetails) {   // Chrome/Edge: la mueve al otro monitor (pide permiso)
+    window.getScreenDetails().then(sd => {
+      const s = sd.screens.find(x => x !== sd.currentScreen);
+      if (s && second && !second.closed) { second.moveTo(s.availLeft, s.availTop); second.resizeTo(s.availWidth, s.availHeight); }
+    }).catch(() => {});
+  }
+}
+btnSecond.onclick = openSecond;
+addEventListener('beforeunload', () => { if (second && !second.closed) second.close(); });
 
 // --- Instalar como app (PWA) ---
 let deferredInstall = null;
