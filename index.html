@@ -195,11 +195,12 @@
   <div class="section">Mis presets</div>
   <div class="prow"><input id="upName" type="text" maxlength="24" placeholder="Nombre del preset…"><button id="upSave">💾 Guardar</button></div>
   <div class="upl" id="userPresets"></div>
+  <div class="btns"><button id="upExport">⬇ Exportar presets</button><button id="upImport">⬆ Importar presets</button></div>
 
   <div class="section">Presets MIDI</div>
   <div class="prow"><input id="mpName" type="text" maxlength="24" placeholder="Nombre del mapeo…"><button id="mpSave">💾 Guardar</button></div>
   <div class="upl" id="midiPresets"></div>
-  <div class="btns three"><button id="mpClear">🧹 Limpiar</button><button id="upExport">⬇ Exportar</button><button id="upImport">⬆ Importar</button></div>
+  <div class="btns three"><button id="mpClear">🧹 Limpiar</button><button id="mpExport">⬇ Exportar</button><button id="mpImport">⬆ Importar</button></div>
   <input type="file" id="upFile" accept=".json,application/json" style="display:none">
 
   <div class="section">Audio</div>
@@ -221,7 +222,8 @@
     <button id="btnGyro">📱 Giroscopio</button>
     <button id="btnAutoUI" class="active">🙈 Auto-ocultar</button>
     <button id="btnInstall">📲 Instalar app</button>
-    <button id="btnSecond" class="wide">🪟 Segunda pantalla</button>
+    <button id="btnFxOff">🧼 Quitar filtros</button>
+    <button id="btnSecond">🪟 Segunda pantalla</button>
   </div>
 
   <div class="section">Acciones</div>
@@ -596,7 +598,42 @@ function mkProg(frag){
   return pr;
 }
 const prog = mkProg(fragSrc);
-const blitProg = mkProg('precision mediump float; uniform sampler2D t; uniform vec2 r; void main(){ gl_FragColor = texture2D(t, gl_FragCoord.xy / r); }');
+const blitSrc = `precision highp float;
+uniform sampler2D t; uniform vec2 r;
+uniform float tm, ca, gr, sc, px, gt, ps, bl, vg, fe, bt;
+float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+void main(){
+  vec2 q = gl_FragCoord.xy / r;
+  if (fe > 0.0){                                   // lente (ojo de pez)
+    vec2 c0 = q - 0.5; q = 0.5 + c0 * (1.0 - fe * dot(c0, c0) * 1.2);   // ojo de pez: amplía el centro sin bordes negros
+    if (q.x < 0.0 || q.x > 1.0 || q.y < 0.0 || q.y > 1.0){ gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
+  }
+  if (px > 0.0){                                   // pixelado
+    float n = mix(r.y, 24.0, px); vec2 g = vec2(n * r.x / r.y, n);
+    q = (floor(q * g) + 0.5) / g;
+  }
+  if (gt > 0.0){                                   // glitch: bandas desplazadas
+    float row = floor(q.y * 40.0), k = floor(tm * 8.0);
+    float on = step(0.93 - gt * 0.25 - bt * gt * 0.1, h(vec2(row, k)));
+    q.x += on * (h(vec2(row, k + 7.0)) - 0.5) * 0.12 * gt;
+  }
+  vec2 d = (q - 0.5) * ca * 0.04 * (1.0 + bt * 1.5);   // aberración cromática, más fuerte con el beat
+  vec3 c = vec3(texture2D(t, q + d).r, texture2D(t, q).g, texture2D(t, q - d).b);
+  if (bl > 0.0){                                   // resplandor
+    vec3 s = vec3(0.0);
+    for (int i = 0; i < 12; i++){
+      float a = float(i) * 0.5236, rr = i < 6 ? 0.006 : 0.016;
+      s += max(texture2D(t, q + vec2(cos(a), sin(a)) * rr * vec2(r.y / r.x, 1.0)).rgb - 0.45, 0.0);
+    }
+    c += s / 12.0 * bl * 2.2;
+  }
+  if (ps > 0.0){ float lv = mix(32.0, 3.0, ps); c = floor(c * lv + 0.5) / lv; }                         // posterizar
+  if (sc > 0.0) c *= 1.0 - sc * 0.5 * (0.5 + 0.5 * sin(gl_FragCoord.y * 2.0));                           // líneas de escaneo
+  if (vg > 0.0) c *= 1.0 - vg * smoothstep(0.25, 0.95, length((gl_FragCoord.xy / r - 0.5) * vec2(r.x / r.y, 1.0)) * 1.2);
+  if (gr > 0.0) c += (h(gl_FragCoord.xy + fract(tm) * 97.0) - 0.5) * gr * 0.5;                           // grano
+  gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
+}`;
+const blitProg = mkProg(blitSrc);
 const buf = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
@@ -626,6 +663,16 @@ const defs = [
   { id: 'sat',      name: 'Saturación',       min: 0,    max: 2,    step: 0.01, val: 1.1 },
   { id: 'bright',   name: 'Brillo',           min: 0.2,  max: 3,    step: 0.01, val: 1 },
   { id: 'trail',    name: 'Estela',           min: 0,    max: 0.95, step: 0.01, val: 0 },
+  { sec: 'Filtros' },
+  { id: 'ca',     name: 'Aberración cromática', min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'grain',  name: 'Grano de película',    min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'scan',   name: 'Líneas de escaneo',    min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'vig',    name: 'Viñeta',               min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'bloom',  name: 'Resplandor',           min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'glitch', name: 'Glitch',               min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'pix',    name: 'Pixelado',             min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'post',   name: 'Posterizar',           min: 0, max: 1, step: 0.01, val: 0 },
+  { id: 'lens',   name: 'Lente',                min: 0, max: 1, step: 0.01, val: 0 },
   { sec: 'Sistema' },
   { id: 'audioGain',name: 'Sensibilidad audio', min: 0,  max: 5,    step: 0.1,  val: 1.5 },
   { id: 'react',    name: 'Fuerza de reacción', min: 0,  max: 2,    step: 0.05, val: 1 },
@@ -719,7 +766,10 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','Mis presets':'My presets','Presets MIDI':'MIDI presets','💾 Guardar':'💾 Save','🧹 Limpiar':'🧹 Clear','⬇ Exportar':'⬇ Export','⬆ Importar':'⬆ Import',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','Copiar enlace':'Copy link','Exportar este preset':'Export this preset','⬇ Exportar presets':'⬇ Export presets','⬆ Importar presets':'⬆ Import presets',
+ 'No hay presets para exportar.':'There are no presets to export.','No se encontraron presets válidos.':'No valid presets found.','Enlace copiado':'Link copied','Copia este enlace:':'Copy this link:',
+ 'Preset compartido cargado':'Shared preset loaded','Filtros':'Filters','Aberración cromática':'Chromatic aberration','Grano de película':'Film grain','Líneas de escaneo':'Scanlines','Viñeta':'Vignette',
+ 'Resplandor':'Glow','Pixelado':'Pixelate','Posterizar':'Posterize','Lente':'Lens','🧼 Quitar filtros':'🧼 Reset filters','Mis presets':'My presets','Presets MIDI':'MIDI presets','💾 Guardar':'💾 Save','🧹 Limpiar':'🧹 Clear','⬇ Exportar':'⬇ Export','⬆ Importar':'⬆ Import',
  'Nombre del preset…':'Preset name…','Nombre del mapeo…':'Mapping name…','Todavía no hay presets guardados':'No saved presets yet','Sin mapeos MIDI guardados':'No saved MIDI mappings',
  'Borrar':'Delete','¿Borrar ':'Delete ','Presets importados: ':'Presets imported: ','El archivo no es válido.':'The file is not valid.',
  'Aún no has asignado controles MIDI (doble clic en un slider y mueve una perilla).':'You have not assigned any MIDI controls yet (double-click a slider, then move a knob).','🎬 Demostración':'🎬 Demo','⏹ Detener demo':'⏹ Stop demo','No se pudo cargar la canción de la demo. Revisa tu conexión.':'Could not load the demo song. Check your connection.','🙈 Auto-ocultar':'🙈 Auto-hide','Ocultar':'Hide','Ocultar panel':'Hide panel','🧊 Esponja de Menger':'🧊 Menger Sponge','Paleta':'Palette',
@@ -734,7 +784,7 @@ const TR = {
  '⏺ Grabar video':'⏺ Record video','⏹ Detener grabación':'⏹ Stop recording','⚡ Resolución auto':'⚡ Auto resolution','📱 Giroscopio':'📱 Gyroscope','🛡 Modo seguro':'🛡 Safe mode',
  'Arrastra canciones aquí o pulsa ＋':'Drop songs here or press ＋','Lista de reproducción':'Playlist','Vaciar':'Clear','Todavía no hay canciones':'No songs yet','No se pudo reproducir: ':'Could not play: ',
  'Aleatorio':'Shuffle','Anterior (B)':'Previous (B)','Reproducir / pausa (P)':'Play / pause (P)','Siguiente (N)':'Next (N)','Repetir':'Repeat','Lista':'List','Añadir canciones':'Add songs','Mostrar/ocultar panel (H)':'Show/hide panel (H)',
- 'Suelta tus canciones aquí':'Drop your songs here','⚠ Aviso de fotosensibilidad':'⚠ Photosensitivity warning','Activar modo seguro':'Enable safe mode','Continuar':'Continue','☕ Invítame un café':'☕ Buy me a coffee',
+ 'Suelta canciones o presets (.json) aquí':'Drop songs or presets (.json) here','⚠ Aviso de fotosensibilidad':'⚠ Photosensitivity warning','Activar modo seguro':'Enable safe mode','Continuar':'Continue','☕ Invítame un café':'☕ Buy me a coffee',
  'No se pudo acceder al micrófono: ':'Could not access the microphone: ','No se compartió audio. Para todo el audio del PC elige "Pantalla completa" y activa "Compartir audio del sistema"; para una sola pestaña activa "Compartir audio de la pestaña".':'No audio was shared. For all PC audio choose "Entire screen" and tick "Share system audio"; for a single tab tick "Share tab audio".',
  'No se pudo capturar el audio: ':'Could not capture audio: ','Tu navegador no soporta Web MIDI (usa Chrome o Edge).':'Your browser does not support Web MIDI (use Chrome or Edge).',
  'Tu navegador no puede grabar video.':'Your browser cannot record video.','No se pudo activar el giroscopio.':'Could not enable the gyroscope.'
@@ -982,7 +1032,8 @@ let dragDepth = 0;
 window.addEventListener('dragenter', e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { dragDepth++; document.body.classList.add('dragging'); } });
 window.addEventListener('dragleave', () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove('dragging'); } });
 window.addEventListener('dragover', e => e.preventDefault());
-window.addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; document.body.classList.remove('dragging'); addFiles(e.dataTransfer.files); });
+window.addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; document.body.classList.remove('dragging'); addFiles(e.dataTransfer.files);
+  [...e.dataTransfer.files].filter(f => /\.json$/i.test(f.name)).forEach(f => importFile(f, ['visual', 'midi'])); });
 
 // Teclas multimedia del teclado / pantalla de bloqueo
 if ('mediaSession' in navigator) {
@@ -1118,6 +1169,7 @@ window.addEventListener('keydown', e => {
 // --- Feedback: dos texturas que se turnan (ping-pong) ---
 let T = [], ti = 0;
 const blitT = gl.getUniformLocation(blitProg, 't'), blitR = gl.getUniformLocation(blitProg, 'r');
+const BU = {}; ['tm','ca','gr','sc','px','gt','ps','bl','vg','fe','bt'].forEach(n => BU[n] = gl.getUniformLocation(blitProg, n));
 function makeTargets(){
   T.forEach(o => { gl.deleteTexture(o.tex); gl.deleteFramebuffer(o.fb); });
   T = [0, 1].map(() => {
@@ -1232,7 +1284,7 @@ function applyLang(){
   document.querySelectorAll('[title]').forEach(e => { if (map[e.title]) e.title = map[e.title]; });
   document.querySelectorAll('[placeholder]').forEach(e => { if (map[e.placeholder]) e.placeholder = map[e.placeholder]; });
   document.querySelectorAll('[data-en]').forEach(e => { if (!e.dataset.es) e.dataset.es = e.innerHTML; e.innerHTML = lang === 'en' ? e.dataset.en : e.dataset.es; });
-  document.body.dataset.drop = tr('Suelta tus canciones aquí');
+  document.body.dataset.drop = tr('Suelta canciones o presets (.json) aquí');
   document.getElementById('btnLang').textContent = lang === 'en' ? '🌐 Español' : '🌐 English';
 }
 document.getElementById('btnLang').onclick = () => { lang = lang === 'es' ? 'en' : 'es'; applyLang(); };
@@ -1252,7 +1304,8 @@ function persistMidi(){ store.midiCur = { ...midiMap }; saveStore(); }
 const savedIds = sliderIds.filter(id => id !== 'quality');   // la resolución depende del equipo, no se guarda
 const clamp = (id, v) => Math.min(sliders[id].def.max, Math.max(sliders[id].def.min, v));
 function snapshot(){ const cfg = {}; savedIds.forEach(id => cfg[id] = +(+P[id]).toFixed(3)); return { mode: P.mode, pal: palIdx, cfg }; }
-function loadVisual(pr){ setPal(pr.pal | 0); applyConfig({ mode: pr.mode, ...pr.cfg }); }
+const FX_IDS = ['ca', 'grain', 'scan', 'vig', 'bloom', 'glitch', 'pix', 'post', 'lens'], FX_OFF = Object.fromEntries(FX_IDS.map(k => [k, 0]));
+function loadVisual(pr){ setPal(pr.pal | 0); applyConfig({ ...FX_OFF, mode: pr.mode, ...pr.cfg }); }
 function cleanVisual(v){
   if (!v || typeof v !== 'object' || !Number.isFinite(v.mode)) return null;
   const cfg = {}; savedIds.forEach(id => { const x = v.cfg && v.cfg[id]; if (Number.isFinite(x)) cfg[id] = clamp(id, x); });
@@ -1263,7 +1316,7 @@ function cleanMidi(m){
   const o = {}; for (const cc in m) if (+cc >= 0 && +cc <= 127 && sliderIds.includes(m[cc])) o[cc] = m[cc];
   return o;
 }
-function fillList(id, obj, onLoad, onDel, emptyMsg){
+function fillList(id, obj, onLoad, onDel, emptyMsg, extra){
   const box = document.getElementById(id); box.innerHTML = '';
   const names = Object.keys(obj);
   if (!names.length) { const d = document.createElement('div'); d.className = 'none'; d.textContent = tr(emptyMsg); box.appendChild(d); return; }
@@ -1272,11 +1325,13 @@ function fillList(id, obj, onLoad, onDel, emptyMsg){
     const b = document.createElement('button'); b.className = 'upb'; b.textContent = n; b.onclick = () => onLoad(n);
     const x = document.createElement('button'); x.className = 'upx'; x.textContent = '✕'; x.title = tr('Borrar');
     x.onclick = () => { if (confirm(tr('¿Borrar ') + '"' + n + '"?')) { onDel(n); saveStore(); renderLists(); } };
-    row.append(b, x); box.appendChild(row);
+    const ex = (extra || []).map(([ic, ti, fn]) => { const e = document.createElement('button'); e.className = 'upx'; e.textContent = ic; e.title = tr(ti); e.onclick = () => fn(n); return e; });
+    row.append(b, ...ex, x); box.appendChild(row);
   });
 }
 function renderLists(){
-  fillList('userPresets', store.visual, n => loadVisual(store.visual[n]), n => { delete store.visual[n]; }, 'Todavía no hay presets guardados');
+  fillList('userPresets', store.visual, n => loadVisual(store.visual[n]), n => { delete store.visual[n]; }, 'Todavía no hay presets guardados',
+    [['🔗', 'Copiar enlace', shareLink], ['⬇', 'Exportar este preset', n => exportVisual([n])]]);
   fillList('midiPresets', store.midi, n => { for (const k in midiMap) delete midiMap[k]; Object.assign(midiMap, store.midi[n]); persistMidi(); }, n => { delete store.midi[n]; }, 'Sin mapeos MIDI guardados');
 }
 function readName(id){ const el = document.getElementById(id), n = el.value.trim().slice(0, 24); if (!n || n === '__proto__') { el.focus(); return null; } return { el, n }; }
@@ -1287,25 +1342,56 @@ document.getElementById('mpSave').onclick = () => {
 };
 document.getElementById('mpClear').onclick = () => { for (const k in midiMap) delete midiMap[k]; persistMidi(); };
 ['upName', 'mpName'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById(id === 'upName' ? 'upSave' : 'mpSave').click(); }));
-document.getElementById('upExport').onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: 'Akasha Visions', version: 1, visual: store.visual, midi: store.midi }, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'akasha_visions_presets.json'; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-};
-document.getElementById('upImport').onclick = () => document.getElementById('upFile').click();
-document.getElementById('upFile').onchange = e => {
-  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+let toastT = 0;
+function toast(msg){ const el = document.getElementById('demoTag'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2800); }
+const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+function uniq(obj, n){ n = n.slice(0, 24); if (!own(obj, n)) return n; let i = 2; while (own(obj, n.slice(0, 20) + ' (' + i + ')')) i++; return n.slice(0, 20) + ' (' + i + ')'; }
+function download(name, data){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+  a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+function exportVisual(names){
+  if (!names.length) { toast(tr('No hay presets para exportar.')); return; }
+  const v = {}; names.forEach(n => v[n] = store.visual[n]);
+  download(names.length === 1 ? 'akasha_' + (names[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w-]+/g, '_') || 'preset') + '.json' : 'akasha_visions_presets.json', { app: 'Akasha Visions', version: 1, type: 'visual', visual: v });
+}
+function importData(d, kinds){
+  let n = 0;
+  if (kinds.includes('visual')) for (const k in (d.visual || {})) { const v = cleanVisual(d.visual[k]); if (v && k !== '__proto__') { store.visual[uniq(store.visual, k)] = v; n++; } }
+  if (kinds.includes('midi')) for (const k in (d.midi || {})) { const m = cleanMidi(d.midi[k]); if (m && k !== '__proto__') { store.midi[uniq(store.midi, k)] = m; n++; } }
+  saveStore(); renderLists(); return n;
+}
+function importFile(f, kinds){
   const r = new FileReader();
-  r.onload = () => {
-    try {
-      const d = JSON.parse(r.result); let n = 0;
-      for (const k in (d.visual || {})) { const v = cleanVisual(d.visual[k]); if (v && k !== '__proto__') { store.visual[k.slice(0, 24)] = v; n++; } }
-      for (const k in (d.midi || {})) { const m = cleanMidi(d.midi[k]); if (m && k !== '__proto__') { store.midi[k.slice(0, 24)] = m; n++; } }
-      saveStore(); renderLists(); alert(tr('Presets importados: ') + n);
-    } catch (err) { alert(tr('El archivo no es válido.')); }
-  };
+  r.onload = () => { try { const n = importData(JSON.parse(r.result), kinds); toast(n ? tr('Presets importados: ') + n : tr('No se encontraron presets válidos.')); } catch (err) { toast(tr('El archivo no es válido.')); } };
   r.readAsText(f);
+}
+let fileKinds = ['visual'];
+document.getElementById('upExport').onclick = () => exportVisual(Object.keys(store.visual));
+document.getElementById('mpExport').onclick = () => {
+  if (!Object.keys(store.midi).length) { toast(tr('No hay presets para exportar.')); return; }
+  download('akasha_visions_midi.json', { app: 'Akasha Visions', version: 1, type: 'midi', midi: store.midi });
 };
+document.getElementById('upImport').onclick = () => { fileKinds = ['visual']; document.getElementById('upFile').click(); };
+document.getElementById('mpImport').onclick = () => { fileKinds = ['midi']; document.getElementById('upFile').click(); };
+document.getElementById('upFile').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) importFile(f, fileKinds); };
+
+// Compartir un preset como enlace: viaja dentro de la dirección (#p=...)
+function shareLink(n){
+  const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify({ n, ...store.visual[n] })))));
+  const fallback = () => prompt(tr('Copia este enlace:'), url);
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(() => toast(tr('Enlace copiado')), fallback); else fallback();
+}
+function applyHash(){
+  const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return;
+  try {
+    const d = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
+    const v = cleanVisual(d); if (!v) return;
+    loadVisual(v); document.getElementById('upName').value = String(d.n || '').slice(0, 24);   // listo para guardarlo con su nombre
+    toast(tr('Preset compartido cargado'));
+  } catch (err) {}
+}
+setTimeout(applyHash, 400); addEventListener('hashchange', applyHash);
 renderLists();
 
 // --- Demostración: recorre los 12 modos al ritmo de la canción ---
@@ -1324,11 +1410,13 @@ const DEMO = [
   { pal: 8, cfg: { mode: 2,  speed: 1.2, rotation: 0.2,  zoom: 1,   pulse: 0.3,  segments: 6,  iter: 3, distort: 0.3, hue: 0.5,  cspeed: 0.3,  sat: 1.3, bright: 1.1,  trail: 0.3 } },
   { pal: 6, cfg: { mode: 8,  speed: 0.8, rotation: 0,    zoom: 1,   pulse: 0.1,  segments: 1,  iter: 4, distort: 0,   hue: 0,    cspeed: 0.1,  sat: 1.2, bright: 1.1,  trail: 0.3 } },
 ];
+const DEMO_FX = [{ bloom: .4, grain: .15 }, { ca: .35 }, { bloom: .5, vig: .4 }, { ca: .5, glitch: .15 }, { grain: .25, vig: .5 }, { scan: .4, ca: .2 },
+  { bloom: .6 }, { pix: .25, ca: .2 }, { post: .3, ca: .3 }, { ca: .4, grain: .2 }, { glitch: .3, scan: .3, ca: .4 }, { bloom: .5, lens: .3 }];
 let demo = false, demoScene = -1, demoWasAuto = false, demoTagT = 0;
 const btnDemo = document.getElementById('btnDemo'), demoTag = document.getElementById('demoTag');
 function applyScene(i){
   demoScene = i; const s = DEMO[i];
-  setPal(s.pal); applyConfig(s.cfg);
+  setPal(s.pal); applyConfig({ ...FX_OFF, ...s.cfg, ...DEMO_FX[i] });
   demoTag.textContent = '🎬 ' + modeSel.options[s.cfg.mode].text + '  ·  ' + (i + 1) + '/' + DEMO.length;
   demoTag.classList.add('show'); clearTimeout(demoTagT); demoTagT = setTimeout(() => demoTag.classList.remove('show'), 3500);
 }
@@ -1393,6 +1481,7 @@ function openSecond(){
   }
 }
 btnSecond.onclick = openSecond;
+document.getElementById('btnFxOff').onclick = () => FX_IDS.forEach(k => setParam(k, 0));
 addEventListener('beforeunload', () => { if (second && !second.closed) second.close(); });
 
 // --- Instalar como app (PWA) ---
@@ -1525,6 +1614,9 @@ function frame(now){
   gl.useProgram(blitProg);
   gl.bindTexture(gl.TEXTURE_2D, wr.tex);
   gl.uniform1i(blitT, 0); gl.uniform2f(blitR, canvas.width, canvas.height);
+  gl.uniform1f(BU.tm, time % 1000); gl.uniform1f(BU.bt, beat * rx);
+  gl.uniform1f(BU.ca, P.ca); gl.uniform1f(BU.gr, P.grain * (safe ? 0.5 : 1)); gl.uniform1f(BU.sc, P.scan); gl.uniform1f(BU.px, P.pix);
+  gl.uniform1f(BU.gt, P.glitch * (safe ? 0.3 : 1)); gl.uniform1f(BU.ps, P.post); gl.uniform1f(BU.bl, P.bloom); gl.uniform1f(BU.vg, P.vig); gl.uniform1f(BU.fe, P.lens);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
   gl.useProgram(prog);
   ti = 1 - ti;
