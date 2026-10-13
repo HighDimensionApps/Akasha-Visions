@@ -113,10 +113,10 @@
     0% { opacity: 0; transform: translateY(40px) scale(.4) rotate(-14deg); filter: blur(12px); }
     15% { opacity: 1; transform: none; filter: none; } 80% { opacity: 1; transform: none; }
     100% { opacity: 0; transform: translateY(-30px) scale(1.4); filter: blur(10px); } }
-  #warn, #inst { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(0,0,0,.88); }
-  #warn.gone, #inst.gone { display: none; }
-  #warn .box, #inst .box { max-width: 420px; margin: 16px; padding: 24px; border-radius: 16px; color: #eee; background: rgba(10,5,25,.95); border: 1px solid #a0f; box-shadow: 0 0 30px rgba(180,0,255,.4); }
-  #warn h2, #inst h2 { font-size: 18px; margin-bottom: 10px; } #warn p, #inst p { font-size: 13px; line-height: 1.6; color: #ccc; margin-bottom: 14px; }
+  #warn, #inst, #news { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(0,0,0,.88); }
+  #warn.gone, #inst.gone, #news.gone { display: none; }
+  #warn .box, #inst .box, #news .box { max-width: 420px; margin: 16px; padding: 24px; border-radius: 16px; color: #eee; background: rgba(10,5,25,.95); border: 1px solid #a0f; box-shadow: 0 0 30px rgba(180,0,255,.4); }
+  #warn h2, #inst h2, #news h2 { font-size: 18px; margin-bottom: 10px; } #warn p, #inst p, #news p, #news li { font-size: 13px; line-height: 1.6; color: #ccc; margin-bottom: 14px; }
   #credits { margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.1); text-align: center; font-size: 11px; color: #aaa; }
   #credits b { color: #fff; }
   #kofi { display: block; margin-top: 8px; padding: 9px; border-radius: 10px; color: #fff; text-decoration: none; font-size: 13px;
@@ -139,6 +139,12 @@
   .up { display: flex; gap: 4px; }
   .up .upb { flex: 1; min-width: 0; text-align: left; padding: 6px 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .up .upx { flex: none; width: 30px; padding: 6px 0; }
+  .section { cursor: pointer; user-select: none; } .section::before { content: '▾ '; } .section.closed::before { content: '▸ '; } .sbody.closed { display: none; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; } .chip { padding: 4px 8px; font-size: 11px; border-radius: 12px; opacity: .7; }
+  .chip.on { opacity: 1; background: rgba(255,0,200,.35); } .chip.on::before { content: '🔒 '; }
+  #news ul { margin: 0 0 14px 18px; } #news li { margin-bottom: 4px; }
+  body.kiosk { cursor: none; } body.kiosk #panel, body.kiosk #dock, body.kiosk #toggle, body.kiosk #demoTag, body.kiosk #songfx, body.kiosk #inst, body.kiosk #news, body.kiosk #warn { display: none !important; }
+  canvas { touch-action: none; }
   .pclose { width: 30px; height: 30px; padding: 0; flex: none; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
   #toggle { transition: opacity .4s ease; }
@@ -153,6 +159,11 @@
 <canvas id="c"></canvas>
 <div id="songfx"></div>
 <div id="demoTag"></div>
+<div id="news" class="gone"><div class="box" style="max-height:82vh;overflow:auto">
+  <h2>✨ Novedades</h2>
+  <div data-en="<ul><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
+  <div class="btns" style="grid-template-columns:1fr"><button id="newsClose">Entendido</button></div>
+</div></div>
 <div id="inst" class="gone"><div class="box">
   <h2>📲 Instalar Akasha Visions</h2>
   <p id="instP"></p>
@@ -182,6 +193,9 @@
     <option value="9">🫠 Metaballs</option>
     <option value="10">🌠 Partículas de flujo</option>
     <option value="11">🌌 Universo en expansión</option>
+    <option value="12">🎚 Mandala espectral</option>
+    <option value="13">〰️ Osciloscopio y Lissajous</option>
+    <option value="14">🏔 Montañas de espectro</option>
   </select>
 
   <div class="section">Paleta</div>
@@ -196,6 +210,9 @@
   <div class="prow"><input id="upName" type="text" maxlength="24" placeholder="Nombre del preset…"><button id="upSave">💾 Guardar</button></div>
   <div class="upl" id="userPresets"></div>
   <div class="btns"><button id="upExport">⬇ Exportar presets</button><button id="upImport">⬆ Importar presets</button></div>
+  <div class="btns"><button id="btnMutate" class="wide">🧬 Mutar preset</button></div>
+  <div class="hint" data-en="Tap a parameter to lock it (🔒); Mutate then varies only the others.">Toca un parámetro para bloquearlo (🔒); Mutar varía solo los demás.</div>
+  <div class="chips" id="locks"></div>
 
   <div class="section">Presets MIDI</div>
   <div class="prow"><input id="mpName" type="text" maxlength="24" placeholder="Nombre del mapeo…"><button id="mpSave">💾 Guardar</button></div>
@@ -287,7 +304,7 @@ uniform vec2  u_offset;
 uniform float u_time, u_ctime, u_rot;
 uniform float u_mode, u_zoom, u_seg, u_iter, u_hue, u_sat, u_bright;
 uniform float u_distort, u_pulse, u_trail, u_audio, u_mid, u_treble, u_beat, u_fbrot, u_fbzoom;
-uniform sampler2D u_prev;
+uniform sampler2D u_prev, u_spec; uniform float u_sg;
 uniform vec3 u_pa, u_pb, u_pc, u_pd, u_rip[4];
 
 const float PI = 3.14159265;
@@ -471,6 +488,45 @@ vec3 sponge(vec2 uv){
   return col;
 }
 
+float spec(float x){ return min(texture2D(u_spec, vec2(x, 0.25)).r * u_sg, 1.2); }          // espectro real (0..1 de graves a agudos)
+float wave(float x){ return (texture2D(u_spec, vec2(x, 0.75)).r * 2.0 - 1.0) * (0.8 + u_sg); }  // forma de onda real
+
+// --- Modo 12: Mandala espectral (cada pétalo es una frecuencia) ---
+vec3 specmandala(vec2 uv){
+  float r = length(uv), a = atan(uv.y, uv.x);
+  float k = abs(fract(a / 6.28318 * 12.0 + u_time * 0.02) * 2.0 - 1.0);
+  float f = spec(pow(k, 1.4) * 0.65), d = r - (0.22 + f * 0.6);
+  vec3 col = pal(k * 0.6 + f * 0.5 + u_time * 0.05) * (0.018 / (abs(d) + 0.018) + 0.35 * f * step(d, 0.0) * smoothstep(0.0, -0.5, d));
+  return col + pal(0.1) * (0.03 + u_audio * 0.1) / (abs(r - 0.1 - spec(0.02) * 0.2) + 0.02);
+}
+
+// --- Modo 13: Osciloscopio + figura de Lissajous con la onda real ---
+vec3 scope(vec2 uv){
+  vec3 col = vec3(0.0);
+  float x = uv.x * 0.5 + 0.5;
+  for (int i = 0; i < 3; i++){
+    float fi = float(i), y = wave(clamp(x + fi * 0.015, 0.0, 1.0)) * (0.42 - fi * 0.07);
+    col += pal(fi * 0.3 + u_time * 0.05) * 0.012 / (abs(uv.y - y) + 0.012) * (1.0 - fi * 0.25);
+  }
+  for (int i = 0; i < 48; i++){
+    float t = float(i) / 48.0;
+    vec2 p = vec2(wave(t), wave(fract(t + 0.25))) * 0.55;
+    col += pal(t + u_time * 0.1) * 0.00015 / (dot(uv - p, uv - p) + 0.0012);
+  }
+  return col;
+}
+
+// --- Modo 14: Montañas que suben con el espectro ---
+vec3 terrain(vec2 uv){
+  vec3 col = pal(0.7 + uv.y * 0.3) * (0.12 + 0.2 * max(uv.y, 0.0)) + pal(0.1) * 0.08 / (length(uv - vec2(0.0, 0.25)) + 0.1);
+  for (int i = 0; i < 6; i++){
+    float f = float(i), x = clamp(abs(uv.x) * (0.55 + 0.05 * f) + f * 0.07, 0.0, 1.0);
+    float h = spec(x * 0.7) * (0.5 + 0.15 * f) + 0.05 * sin(uv.x * (3.0 + f) + f * 2.0 + u_time * 0.2), top = -0.1 - f * 0.12 + h;
+    if (uv.y < top) col = pal(f * 0.15 + u_time * 0.02) * (0.22 + 0.12 * f) + pal(0.5 + f * 0.1) * 0.3 * smoothstep(0.03, 0.0, top - uv.y);
+  }
+  return col * 1.2;
+}
+
 // --- Modo 9: Metaballs ---
 vec3 metaballs(vec2 uv){
   float f = 0.0; vec3 acc = vec3(0.0);
@@ -560,7 +616,10 @@ void main(){
   else if (u_mode < 8.5) col = sponge(uv);
   else if (u_mode < 9.5) col = metaballs(uv);
   else if (u_mode < 10.5) col = flowp(uv);
-  else                   col = universe(uv);
+  else if (u_mode < 11.5) col = universe(uv);
+  else if (u_mode < 12.5) col = specmandala(uv);
+  else if (u_mode < 13.5) col = scope(uv);
+  else                   col = terrain(uv);
 
   // Saturación y brillo
   float lum = dot(col, vec3(0.299, 0.587, 0.114));
@@ -643,7 +702,7 @@ gl.useProgram(prog);
 
 const U = {};
 ['u_res','u_offset','u_time','u_ctime','u_rot','u_mode','u_zoom','u_seg','u_iter','u_hue',
- 'u_sat','u_bright','u_distort','u_pulse','u_trail','u_audio','u_mid','u_treble','u_beat','u_prev','u_pa','u_pb','u_pc','u_pd','u_rip','u_fbrot','u_fbzoom'].forEach(n => U[n] = gl.getUniformLocation(prog, n));
+ 'u_sat','u_bright','u_distort','u_pulse','u_trail','u_audio','u_mid','u_treble','u_beat','u_prev','u_pa','u_pb','u_pc','u_pd','u_rip','u_fbrot','u_fbzoom','u_spec','u_sg'].forEach(n => U[n] = gl.getUniformLocation(prog, n));
 
 // ==================== PARÁMETROS ====================
 const P = { mode: 0 };
@@ -675,6 +734,10 @@ const defs = [
   { id: 'lens',   name: 'Lente',                min: 0, max: 1, step: 0.01, val: 0 },
   { sec: 'Sistema' },
   { id: 'audioGain',name: 'Sensibilidad audio', min: 0,  max: 5,    step: 0.1,  val: 1.5 },
+  { id: 'gbass',    name: 'Ganancia graves',   min: 0, max: 3,   step: 0.05, val: 1 },
+  { id: 'gmid',     name: 'Ganancia medios',   min: 0, max: 3,   step: 0.05, val: 1 },
+  { id: 'gtre',     name: 'Ganancia agudos',   min: 0, max: 3,   step: 0.05, val: 1 },
+  { id: 'gate',     name: 'Compuerta de ruido', min: 0, max: 0.5, step: 0.01, val: 0 },
   { id: 'react',    name: 'Fuerza de reacción', min: 0,  max: 2,    step: 0.05, val: 1 },
   { id: 'quality',  name: 'Resolución',       min: 0.25, max: 2,    step: 0.05, val: 1 },
 ];
@@ -735,6 +798,9 @@ const presets = {
   '🧊 Hielo':    { mode: 1, speed: 0.4, rotation: 0.02, zoom: 1.5, pulse: 0,   segments: 6,  iter: 8, distort: 0.2, hue: 0.55, cspeed: 0.05,sat: 0.7, bright: 1.3, trail: 0 },
   '🌌 Cosmos':   { mode: 11, speed: 1,  rotation: 0.02, zoom: 1,   pulse: 0.1, segments: 1, iter: 4, distort: 0,   hue: 0.6, cspeed: 0.1, sat: 1.2, bright: 1.1, trail: 0.5 },
   '🫠 Lava':     { mode: 9,  speed: 0.8, rotation: 0,    zoom: 1,   pulse: 0.2, segments: 1, iter: 6, distort: 0.2, hue: 0.0, cspeed: 0.1, sat: 1.4, bright: 1.1, trail: 0.2 },
+  '🎚 Espectro': { mode: 12, speed: 1, rotation: 0.05, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0,   cspeed: 0.15, sat: 1.3, bright: 1.1, trail: 0.4 },
+  '〰️ Onda':     { mode: 13, speed: 1, rotation: 0,    zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0.5, cspeed: 0.2,  sat: 1.3, bright: 1.1, trail: 0.55 },
+  '🏔 Montañas': { mode: 14, speed: 1, rotation: 0,    zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0.8, cspeed: 0.1,  sat: 1.2, bright: 1.1, trail: 0.2 },
   '🌠 Flujo':    { mode: 10, speed: 1,  rotation: 0,    zoom: 1,   pulse: 0.1, segments: 1, iter: 5, distort: 0,   hue: 0.5, cspeed: 0.3, sat: 1.3, bright: 1,   trail: 0.4 },
 };
 const presetBox = document.getElementById('presets');
@@ -755,7 +821,7 @@ function randomize(){
   if (Math.random() < 0.6) setPal(Math.floor(Math.random() * PALS.length));
   const r = (a, b) => a + Math.random() * (b - a);
   applyConfig({
-    mode: Math.floor(Math.random() * 12),
+    mode: Math.floor(Math.random() * 15),
     speed: r(0.3, 2), rotation: r(-0.6, 0.6), zoom: r(0.5, 2), pulse: r(0, 0.6),
     segments: Math.floor(r(1, 13)), iter: Math.floor(r(2, 8)), distort: r(0, 1.2),
     hue: Math.random(), cspeed: r(0, 0.8), sat: r(0.8, 1.6), bright: r(0.8, 1.4), trail: r(0, 0.6)
@@ -766,7 +832,8 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','Copiar enlace':'Copy link','Exportar este preset':'Export this preset','⬇ Exportar presets':'⬇ Export presets','⬆ Importar presets':'⬆ Import presets',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','✨ Novedades':'✨ What’s new','Entendido':'Got it','🧬 Mutar preset':'🧬 Mutate preset','🎚 Mandala espectral':'🎚 Spectral Mandala','〰️ Osciloscopio y Lissajous':'〰️ Oscilloscope & Lissajous','🏔 Montañas de espectro':'🏔 Spectrum Mountains',
+ '🎚 Espectro':'🎚 Spectrum','〰️ Onda':'〰️ Wave','🏔 Montañas':'🏔 Mountains','Ganancia graves':'Bass gain','Ganancia medios':'Mid gain','Ganancia agudos':'Treble gain','Compuerta de ruido':'Noise gate','Copiar enlace':'Copy link','Exportar este preset':'Export this preset','⬇ Exportar presets':'⬇ Export presets','⬆ Importar presets':'⬆ Import presets',
  'No hay presets para exportar.':'There are no presets to export.','No se encontraron presets válidos.':'No valid presets found.','Enlace copiado':'Link copied','Copia este enlace:':'Copy this link:',
  'Preset compartido cargado':'Shared preset loaded','Filtros':'Filters','Aberración cromática':'Chromatic aberration','Grano de película':'Film grain','Líneas de escaneo':'Scanlines','Viñeta':'Vignette',
  'Resplandor':'Glow','Pixelado':'Pixelate','Posterizar':'Posterize','Lente':'Lens','🧼 Quitar filtros':'🧼 Reset filters','Mis presets':'My presets','Presets MIDI':'MIDI presets','💾 Guardar':'💾 Save','🧹 Limpiar':'🧹 Clear','⬇ Exportar':'⬇ Export','⬆ Importar':'⬆ Import',
@@ -797,7 +864,7 @@ const tr = s => (lang === 'en' && TR[s]) || s;
 const audioEl = document.getElementById('audio');
 const volEl = document.getElementById('vol');
 let actx = null, analyser = null, fft = null, musicGain = null, mediaSrc = null, recDest = null;
-let audioLevel = 0, bass = 0, mid = 0, treble = 0, beat = 0;
+let gated = false, audioLevel = 0, bass = 0, mid = 0, treble = 0, beat = 0;
 let bassAvg = 0, lastBass = 0, lastBeatT = 0, beatFlag = false;
 
 function ensureCtx(){
@@ -837,6 +904,9 @@ function updateAudio(dt, now){
   analyser.getByteFrequencyData(fft);
   bass = bandAvg(40, 250); mid = bandAvg(250, 2000); treble = bandAvg(2000, 12000);
 
+  bass *= P.gbass; mid *= P.gmid; treble *= P.gtre;
+  gated = (bass + mid + treble) / 3 < P.gate;
+  if (gated) bass = mid = treble = 0;
   const lvl = (bass * 0.6 + mid * 0.4) * P.audioGain * 0.6;
   audioLevel += (lvl - audioLevel) * 0.3;
 
@@ -1154,8 +1224,8 @@ window.addEventListener('keydown', e => {
   else if (k === 'h') togglePanel();
   else if (k === 'f') toggleFull();
   else if (k === 's') save();
-  else if (k === ']') setMode((P.mode + 1) % 12);
-  else if (k === '[') setMode((P.mode + 11) % 12);
+  else if (k === ']') setMode((P.mode + 1) % 15);
+  else if (k === '[') setMode((P.mode + 14) % 15);
   else if (k === 'p') togglePlay();
   else if (k === 'm') toggleDock();
   else if (k === 'n') nextTrack(false);
@@ -1187,6 +1257,21 @@ function makeTargets(){
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 }
 
+// --- Espectro real como textura para los shaders ---
+const specTex = gl.createTexture(), specBuf = new Uint8Array(1024), wavBuf = new Uint8Array(1024);
+gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, specTex);
+specBuf.fill(128, 512); gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, 512, 2, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, specBuf);
+[[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(([k, v]) => gl.texParameteri(gl.TEXTURE_2D, k, v));
+gl.activeTexture(gl.TEXTURE0);
+function uploadSpec(){
+  if (analyser && fft && !gated) { specBuf.set(fft.subarray(0, 512), 0); analyser.getByteTimeDomainData(wavBuf); for (let i = 0; i < 512; i++) specBuf[512 + i] = wavBuf[i * 2]; }
+  else { specBuf.fill(0, 0, 512); specBuf.fill(128, 512); }
+  gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, specTex);
+  gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 512, 2, gl.LUMINANCE, gl.UNSIGNED_BYTE, specBuf);
+  gl.activeTexture(gl.TEXTURE0);
+}
+
 // --- Ondas al tocar ---
 const rips = [0, 1, 2, 3].map(() => ({ x: 0, y: 0, t: -1 })), ripArr = new Float32Array(12); let ri = 0;
 function addRipple(cx, cy){
@@ -1204,14 +1289,14 @@ function toggleRec(btn){
   ensureCtx();
   const stream = canvas.captureStream(60);
   recDest.stream.getAudioTracks().forEach(tk => stream.addTrack(tk));
-  const mime = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+  const mime = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
   const chunks = [];
   rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8e6 });
   rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
   rec.onstop = () => {
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
-    a.download = 'akasha_visions_' + Date.now() + '.webm'; a.click();
+    a.href = URL.createObjectURL(new Blob(chunks, { type: (mime || 'video/webm').split(';')[0] }));
+    a.download = 'akasha_visions_' + Date.now() + ((mime || '').startsWith('video/mp4') ? '.mp4' : '.webm'); a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
     rec = null; btn.classList.remove('active'); btn.textContent = tr('⏺ Grabar video');
   };
@@ -1293,8 +1378,8 @@ document.getElementById('btnRes').onclick = e => { autoRes = !autoRes; e.current
 document.getElementById('btnMidi').onclick = e => toggleMidi(e.currentTarget);
 document.getElementById('btnGyro').onclick = e => toggleGyro(e.currentTarget);
 document.getElementById('btnSafe').onclick = () => setSafe(!safe);
-document.getElementById('wSafe').onclick = () => { setSafe(true); document.getElementById('warn').classList.add('gone'); };
-document.getElementById('wGo').onclick = () => document.getElementById('warn').classList.add('gone');
+document.getElementById('wSafe').onclick = () => { setSafe(true); document.getElementById('warn').classList.add('gone'); showNews(); };
+document.getElementById('wGo').onclick = () => { document.getElementById('warn').classList.add('gone'); showNews(); };
 // --- Presets del usuario: visuales y MIDI (se guardan en el navegador) ---
 let store = { visual: {}, midi: {}, midiCur: {} };
 try { const s = JSON.parse(localStorage.getItem('akasha_presets_v1')); if (s) store = Object.assign(store, s); } catch (e) {}
@@ -1523,6 +1608,69 @@ btnInstall.onclick = async () => {
 };
 document.getElementById('instClose').onclick = () => document.getElementById('inst').classList.add('gone');
 
+const qs = new URLSearchParams(location.search), kiosk = qs.has('clean');
+// --- Novedades (se muestran una vez por versión, después del aviso de seguridad) ---
+const NEWS_KEY = 'akasha_news_v2';
+function showNews(){
+  if (kiosk) return;
+  try { if (localStorage.getItem(NEWS_KEY)) return; } catch (e) {}
+  document.getElementById('news').classList.remove('gone');
+}
+document.getElementById('newsClose').onclick = () => { document.getElementById('news').classList.add('gone'); try { localStorage.setItem(NEWS_KEY, '1'); } catch (e) {} };
+
+// --- Gestos táctiles: pellizcar = zoom, girar dos dedos = rotar ---
+let pinch = null;
+const tdata = e => { const [a, b] = e.touches; return { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1, a: Math.atan2(b.clientY - a.clientY, b.clientX - a.clientX) }; };
+canvas.addEventListener('touchstart', e => { if (e.touches.length === 2) { dragging = false; down = null; pinch = tdata(e); } }, { passive: true });
+canvas.addEventListener('touchmove', e => {
+  if (e.touches.length !== 2 || !pinch) return;
+  e.preventDefault(); targets = null; const n = tdata(e), d = sliders.zoom.def;   // el gesto manda sobre cualquier transición en curso
+  setParam('zoom', Math.min(d.max, Math.max(d.min, P.zoom * n.d / pinch.d)));
+  rotA -= n.a - pinch.a; pinch = n;
+}, { passive: false });
+canvas.addEventListener('touchend', e => { if (e.touches.length < 2) pinch = null; });
+
+// --- Mutar preset: variaciones aleatorias; los parámetros bloqueados no cambian ---
+const MUT_IDS = ['speed', 'rotation', 'zoom', 'pulse', 'segments', 'iter', 'distort', 'hue', 'cspeed', 'sat', 'bright', 'trail'], locked = new Set();
+MUT_IDS.forEach(id => {
+  const c = document.createElement('button'); c.className = 'chip'; c.textContent = sliders[id].def.name;
+  c.onclick = () => { locked.has(id) ? locked.delete(id) : locked.add(id); c.classList.toggle('on', locked.has(id)); };
+  document.getElementById('locks').appendChild(c);
+});
+document.getElementById('btnMutate').onclick = () => {
+  const cfg = {};
+  MUT_IDS.forEach(id => {
+    if (locked.has(id)) return;
+    const d = sliders[id].def; let v = +P[id] + (Math.random() + Math.random() - 1) * (d.max - d.min) * 0.18;
+    v = Math.min(d.max, Math.max(d.min, v)); cfg[id] = d.step >= 1 ? Math.round(v) : +v.toFixed(3);
+  });
+  targets = cfg;
+};
+
+// --- Secciones desplegables (el estado se recuerda) ---
+function wrapSections(root){
+  let saved = {}; try { saved = JSON.parse(localStorage.getItem('akasha_sections')) || {}; } catch (e) {}
+  const closedDef = ['Geometría', 'Color', 'Filtros', 'Sistema', 'Presets', 'Mis presets', 'Presets MIDI', 'Herramientas'], stop = ['sliders', 'help', 'credits'];
+  let body = null;
+  [...root.children].forEach(el => {
+    if (el.classList.contains('section')) {
+      const key = el.textContent.trim(), b = body = document.createElement('div'); b.className = 'sbody'; el.after(b);
+      const closed = key in saved ? saved[key] : closedDef.includes(key);
+      el.classList.toggle('closed', closed); b.classList.toggle('closed', closed);
+      el.onclick = () => { const c = !el.classList.contains('closed'); el.classList.toggle('closed', c); b.classList.toggle('closed', c); saved[key] = c; try { localStorage.setItem('akasha_sections', JSON.stringify(saved)); } catch (e) {} };
+    } else if (stop.includes(el.id)) body = null;
+    else if (body) body.appendChild(el);
+  });
+}
+wrapSections(document.getElementById('sliders')); wrapSections(document.getElementById('panel'));
+
+// --- Modo kiosco: ?clean oculta toda la interfaz (opcional: &mode=N &pal=N &auto &mic &safe) ---
+if (kiosk) {
+  document.body.classList.add('kiosk');
+  if (qs.has('mode')) setMode(+qs.get('mode')); if (qs.has('pal')) setPal(+qs.get('pal'));
+  if (qs.has('safe')) setSafe(true); if (qs.has('auto')) toggleAuto();
+  if (qs.has('mic')) startMic(document.getElementById('btnAudio'));
+}
 applyLang();
 
 // ==================== RESIZE ====================
@@ -1577,7 +1725,7 @@ function frame(now){
   if (!paused) {
     time  += dt * Math.min(P.speed, safe ? 1.2 : 99) * (1 + audioLevel);
     ctime += dt * P.cspeed * 0.2;
-    rotA  += dt * (P.rotation + beat * rx * 0.8);
+    rotA = (P.mode === 13 || P.mode === 14) ? 0 : rotA + dt * (P.rotation + beat * rx * 0.8);   // osciloscopio y montañas se quedan derechos
   }
 
   gl.uniform2f(U.u_res, canvas.width, canvas.height);
@@ -1605,6 +1753,7 @@ function frame(now){
   gl.uniform1f(U.u_fbzoom, 1.008 + audioLevel * 0.01 + beat * rx * 0.012);
   gl.uniform1f(U.u_fbrot, (P.rotation >= 0 ? 1 : -1) * 0.004 + beat * rx * 0.006);
 
+  uploadSpec(); gl.uniform1i(U.u_spec, 1); gl.uniform1f(U.u_sg, P.audioGain * 0.7);
   const rd = T[ti], wr = T[1 - ti];
   gl.bindFramebuffer(gl.FRAMEBUFFER, wr.fb);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, rd.tex);
