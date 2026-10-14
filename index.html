@@ -207,6 +207,7 @@
     <option value="18">🔬 Mandelbrot en zoom</option>
     <option value="19">🚢 Burning Ship</option>
     <option value="20">🌀 Fractal de Newton</option>
+    <option value="21">🔷 Geometría hiperbólica</option>
   </select>
 
   <div class="section">Paleta</div>
@@ -630,6 +631,35 @@ vec3 newton(vec2 uv){
   return pal(atan(z.y, z.x) / 6.2832 + 0.5 + u_time * 0.03 + u_audio * 0.2) * (1.0 - n / 40.0 * 0.85) * 1.3;
 }
 
+// --- Modo 21: Geometría hiperbólica (teselación {p,q} en el disco de Poincaré, estilo Escher) ---
+vec2 cmul(vec2 a, vec2 b){ return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x); }
+vec2 cdiv(vec2 a, vec2 b){ return cmul(a, vec2(b.x, -b.y)) / dot(b, b); }
+vec3 hyper(vec2 uv){
+  float k = mod(floor((u_iter - 1.0) / 2.0), 5.0), p = 7.0, q = 3.0;                  // la complejidad elige la teselación
+  if (k > 3.5){ p = 8.0; q = 3.0; } else if (k > 2.5){ p = 3.0; q = 7.0; } else if (k > 1.5){ p = 4.0; q = 5.0; } else if (k > 0.5){ p = 5.0; q = 4.0; }
+  float al = 3.14159265 / p, be = 3.14159265 / q;
+  float c = cos(be) / sqrt(cos(al) * cos(al) - sin(be) * sin(be)), r = sqrt(c * c - 1.0);   // círculo-espejo ortogonal al borde
+  vec2 n = vec2(-sin(al), cos(al)), C = vec2(c, 0.0), z = uv * 1.04;
+  float rr = dot(z, z);
+  if (rr >= 1.0) return pal(0.1 + u_time * 0.02) * 0.03 / (abs(sqrt(rr) - 1.0) + 0.02);
+  float t = u_time * 0.25;
+  vec2 a = (0.5 + 0.1 * sin(t * 0.7)) * vec2(cos(t), sin(t * 0.8));                  // desplazamiento hiperbólico (Möbius)
+  z = rot(u_time * 0.08) * z;
+  z = cdiv(z - a, vec2(1.0, 0.0) - cmul(vec2(a.x, -a.y), z));
+  vec2 z0 = z; float folds = 0.0;
+  for (int i = 0; i < 24; i++){                                                       // se pliega todo al triángulo fundamental
+    if (z.y < 0.0){ z.y = -z.y; folds += 1.0; }
+    float dn = dot(z, n); if (dn > 0.0){ z -= 2.0 * dn * n; folds += 1.0; }
+    vec2 w = z - C; float d2 = dot(w, w); if (d2 < r * r){ z = C + w * (r * r / d2); folds += 1.0; }
+  }
+  float par = mod(folds, 2.0), de = min(z.y, min(-dot(z, n), length(z - C) - r));
+  float w = 2.0 * de / max(1.0 - dot(z, z), 1e-3);                                    // distancia hiperbólica al borde de la baldosa
+  float ring = spec(clamp(length(z0), 0.0, 1.0) * 0.6);                              // los anillos de baldosas vibran con el espectro
+  vec3 col = pal(par * 0.5 + folds * 0.04 + length(z) * 0.6 + u_time * 0.04) * (0.25 + 0.5 * par + ring * 0.8);
+  col += pal(0.1 + ring) * (0.02 / (w + 0.02)) * (1.0 + u_audio * 2.0);
+  return col * smoothstep(0.0, 0.05, 1.0 - rr);   // se desvanece en el borde del disco (donde las baldosas son diminutas)
+}
+
 // --- Modo 9: Metaballs ---
 vec3 metaballs(vec2 uv){
   float f = 0.0; vec3 acc = vec3(0.0);
@@ -706,7 +736,8 @@ vec3 render(float m, vec2 uv){
   else if (m < 17.5) return turing(uv);
   else if (m < 18.5) return mandel(uv);
   else if (m < 19.5) return ship(uv);
-  return newton(uv);
+  else if (m < 20.5) return newton(uv);
+  return hyper(uv);
 }
 
 void main(){
@@ -923,6 +954,7 @@ const presets = {
   '🔬 Zoom':     { mode: 18, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.3, trail: 0.1 },
   '🚢 Barco':    { mode: 19, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.05, trail: 0.1 },
   '🌀 Newton':   { mode: 20, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.5, trail: 0.2 },
+  '🔷 Hiperbólico': { mode: 21, speed: 1, rotation: 0.02, zoom: 1, pulse: 0.1, segments: 1, iter: 1, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.6, trail: 0.3 },
   '🌠 Flujo':    { mode: 10, speed: 1,  rotation: 0,    zoom: 1,   pulse: 0.1, segments: 1, iter: 5, distort: 0,   hue: 0.5, cspeed: 0.3, sat: 1.3, bright: 1,   trail: 0.4 },
 };
 const presetBox = document.getElementById('presets');
@@ -954,7 +986,7 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🔷 Geometría hiperbólica':'🔷 Hyperbolic Geometry','🔷 Hiperbólico':'🔷 Hyperbolic','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
  'Graves':'Bass','Medios':'Mid','Agudos':'High','Volumen':'Level','➕ Añadir':'➕ Add','Sin modulaciones. Añade una arriba.':'No modulations. Add one above.','Cantidad (%)':'Amount (%)','compases':'bars','Duración en segundos o en compases':'Duration in seconds or bars','🌌 Aurora boreal':'🌌 Aurora Borealis','🕳 Agujero negro':'🕳 Black Hole','🐆 Patrones de Turing':'🐆 Turing Patterns','🔬 Mandelbrot en zoom':'🔬 Mandelbrot Zoom',
  '🌌 Aurora':'🌌 Aurora','🕳 Horizonte':'🕳 Horizon','🐆 Turing':'🐆 Turing','🔬 Zoom':'🔬 Zoom','Escenas':'Scenes','➕ Añadir escena':'➕ Add scene','▶ Reproducir escenas':'▶ Play scenes','⏹ Detener escenas':'⏹ Stop scenes',
  'Todavía no hay escenas. Guarda presets y añádelos aquí.':'No scenes yet. Save presets and add them here.','🏷 Marca de agua':'🏷 Watermark','Duración (s)':'Duration (s)','Transición (s)':'Transition (s)','Busca tu visión y compártela':'Find your vision and share it','Prueba otra de nuestras apps':'Try another of our apps','✨ Novedades':'✨ What’s new','Entendido':'Got it','🧬 Mutar preset':'🧬 Mutate preset','🎚 Mandala espectral':'🎚 Spectral Mandala','〰️ Osciloscopio y Lissajous':'〰️ Oscilloscope & Lissajous','🏔 Montañas de espectro':'🏔 Spectrum Mountains',
@@ -981,7 +1013,7 @@ const TR = {
  'No se pudo capturar el audio: ':'Could not capture audio: ','Tu navegador no soporta Web MIDI (usa Chrome o Edge).':'Your browser does not support Web MIDI (use Chrome or Edge).',
  'Tu navegador no puede grabar video.':'Your browser cannot record video.','No se pudo activar el giroscopio.':'Could not enable the gyroscope.'
 };
-const NM = 21;   // cantidad de modos
+const NM = 22;   // cantidad de modos
 const REV = {}; Object.keys(TR).forEach(k => REV[TR[k]] = k);
 let lang = (navigator.language || 'es').toLowerCase().startsWith('es') ? 'es' : 'en';
 const tr = s => (lang === 'en' && TR[s]) || s;
@@ -1759,9 +1791,10 @@ const DEMO2 = [
   dm(19, 5, { trail: 0.1, hue: 0.05 }),
   dm(20, 8, { trail: 0.2 }),
   dm(13, 3, { trail: 0.55 }),
+  dm(21, 8, { iter: 1, trail: 0.3, hue: 0.6 }),
   dm(16, 8, { hue: 0.2, xfade: 0.5 }, { b: 15, mods: [{ s: 'beat', d: 'bloom', a: 0.4 }] })
 ];
-const DEMO2_FX = [{ bloom: .3, vig: .3 }, { ca: .3, grain: .15 }, { bloom: .4, ca: .25 }, { scan: .2, ca: .3 }, { bloom: .2 }, { vig: .4, grain: .15 }, { ca: .4, post: .2 }, { glitch: .1, ca: .3 }, { bloom: .5 }, { bloom: .4, ca: .3, vig: .3 }];
+const DEMO2_FX = [{ bloom: .3, vig: .3 }, { ca: .3, grain: .15 }, { bloom: .4, ca: .25 }, { scan: .2, ca: .3 }, { bloom: .2 }, { vig: .4, grain: .15 }, { ca: .4, post: .2 }, { glitch: .1, ca: .3 }, { bloom: .5 }, { ca: .3, bloom: .3 }, { bloom: .4, ca: .3, vig: .3 }];
 const DEMOS = [{ url: DEMO_URL, name: 'Calma Profunda', scenes: DEMO, fx: DEMO_FX }, { url: DEMO2_URL, name: 'Jah Ragga – Om Power', scenes: DEMO2, fx: DEMO2_FX }];
 let demo = false, demoScene = -1, demoWasAuto = false, demoTagT = 0, curDemo = DEMOS[0];
 const DEMO_BTNS = [document.getElementById('btnDemo'), document.getElementById('btnDemo2')], demoTag = document.getElementById('demoTag');
