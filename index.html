@@ -149,6 +149,7 @@
   .try { margin-top: 12px; color: #ccc; }
   .applink { display: block; margin-top: 6px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.2); line-height: 0; }
   .applink img { width: 100%; height: auto; display: block; } .applink:hover { filter: brightness(1.15); }
+  .upt { width: 48px; height: 27px; object-fit: cover; border-radius: 4px; flex: none; }
   .pclose { width: 30px; height: 30px; padding: 0; flex: none; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
   #toggle { transition: opacity .4s ease; }
@@ -165,7 +166,7 @@
 <div id="demoTag"></div>
 <div id="news" class="gone"><div class="box" style="max-height:82vh;overflow:auto">
   <h2>✨ Novedades</h2>
-  <div data-en="<ul><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
+  <div data-en="<ul><li>🌌 <b>New modes</b>: aurora borealis, black hole, Turing patterns and Mandelbrot zoom</li><li>🎞 <b>Scenes</b>: order presets and play them as a set, with duration and transition</li><li>🖼 Thumbnails on your presets · 🏷 optional watermark on recordings</li><li>🎮 Gamepad and MIDI notes · ♩ BPM in the player</li><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🌌 <b>Nuevos modos</b>: aurora boreal, agujero negro, patrones de Turing y Mandelbrot en zoom</li><li>🎞 <b>Escenas</b>: ordena presets y reprodúcelos como un set, con duración y transición</li><li>🖼 Miniaturas en tus presets · 🏷 marca de agua opcional en las grabaciones</li><li>🎮 Gamepad y notas MIDI · ♩ BPM en el reproductor</li><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
   <div class="btns" style="grid-template-columns:1fr"><button id="newsClose">Entendido</button></div>
 </div></div>
 <div id="inst" class="gone"><div class="box">
@@ -200,6 +201,10 @@
     <option value="12">🎚 Mandala espectral</option>
     <option value="13">〰️ Osciloscopio y Lissajous</option>
     <option value="14">🏔 Montañas de espectro</option>
+    <option value="15">🌌 Aurora boreal</option>
+    <option value="16">🕳 Agujero negro</option>
+    <option value="17">🐆 Patrones de Turing</option>
+    <option value="18">🔬 Mandelbrot en zoom</option>
   </select>
 
   <div class="section">Paleta</div>
@@ -217,6 +222,12 @@
   <div class="btns"><button id="btnMutate" class="wide">🧬 Mutar preset</button></div>
   <div class="hint" data-en="Tap a parameter to lock it (🔒); Mutate then varies only the others.">Toca un parámetro para bloquearlo (🔒); Mutar varía solo los demás.</div>
   <div class="chips" id="locks"></div>
+
+  <div class="section">Escenas</div>
+  <div class="prow"><select id="scPick" style="flex:1;min-width:0"></select></div>
+  <div class="prow"><span class="hint" style="align-self:center;margin:0">⏱</span><input id="scSecs" type="number" min="3" max="600" value="20" title="Duración (s)"><span class="hint" style="align-self:center;margin:0">↔</span><input id="scTr" type="number" min="0.5" max="10" step="0.5" value="2" title="Transición (s)"></div>
+  <div class="btns"><button id="scAdd">➕ Añadir escena</button><button id="scPlay">▶ Reproducir escenas</button></div>
+  <div class="upl" id="sceneList"></div>
 
   <div class="section">Presets MIDI</div>
   <div class="prow"><input id="mpName" type="text" maxlength="24" placeholder="Nombre del mapeo…"><button id="mpSave">💾 Guardar</button></div>
@@ -244,6 +255,7 @@
     <button id="btnAutoUI" class="active">🙈 Auto-ocultar</button>
     <button id="btnInstall">📲 Instalar app</button>
     <button id="btnFxOff">🧼 Quitar filtros</button>
+    <button id="btnWM" class="active">🏷 Marca de agua</button>
     <button id="btnSecond">🪟 Segunda pantalla</button>
   </div>
 
@@ -533,6 +545,60 @@ vec3 terrain(vec2 uv){
   return col * 1.2;
 }
 
+// --- Modo 15: Aurora boreal ---
+vec3 aurora(vec2 uv){
+  vec3 col = pal(0.6) * 0.05 * (1.0 - uv.y * 0.5);
+  vec2 sq = uv * 55.0; col += vec3(step(0.985, hash2(floor(sq)).x) * smoothstep(0.3, 0.0, length(fract(sq) - 0.5)) * 0.8);
+  for (int i = 0; i < 4; i++){
+    float f = float(i), x = uv.x * (1.2 + f * 0.4) + f * 1.7;
+    float y = 0.1 + 0.2 * sin(x * 1.3 + u_time * (0.25 + f * 0.07)) + 0.12 * sin(x * 2.7 - u_time * 0.4 + f) * (0.6 + u_mid * 2.5);
+    float d = uv.y - y, k = smoothstep(-0.02, 0.0, d) * exp(-d * 3.2) * (0.65 + 0.35 * sin(uv.x * 38.0 + f * 3.0 + u_time));
+    col += pal(0.35 + f * 0.12 + d * 0.4) * k * (0.5 + u_audio * 1.5 + u_mid) * 0.75;
+  }
+  return col;
+}
+
+// --- Modo 16: Agujero negro con lente gravitacional y disco de acreción ---
+vec3 blackhole(vec2 uv){
+  float r = length(uv), rs = 0.17 + u_audio * 0.04;
+  vec2 lu = uv + uv / max(r, 1e-3) * (rs * rs * 2.2 / max(r, rs * 0.8));            // la luz se curva hacia el centro
+  vec2 q = lu * 28.0, id = floor(q);
+  vec3 col = pal(hash2(id).y) * step(0.55, hash2(id + 7.0).x) * smoothstep(0.14, 0.0, length(fract(q) - hash2(id)));
+  float ang = atan(lu.y, lu.x), lr = length(lu);
+  col += pal(0.6 + lr * 0.3) * pow(0.5 + 0.5 * cos(ang * 2.0 - log(lr + 0.05) * 5.0 + u_time * 0.3), 3.0) * exp(-lr * 1.3) * 0.35;
+  vec2 e = vec2(lu.x, lu.y * 3.2); float rd = length(e), ea = atan(e.y, e.x);       // disco visto casi de canto
+  float disk = smoothstep(0.28, 0.34, rd) * smoothstep(0.95, 0.5, rd) * (0.55 + 0.45 * sin(ea * 3.0 - rd * 22.0 + u_time * 2.5)) * (0.65 + 0.35 * cos(ea));
+  col += pal(0.05 + rd * 0.5 + u_time * 0.02) * disk * (1.4 + u_audio * 1.5);
+  col += pal(0.1) * 0.012 / (abs(r - rs * 1.45) + 0.012);                            // anillo de fotones
+  return col * smoothstep(rs * 0.92, rs * 1.05, r);                                  // sombra del horizonte
+}
+
+// --- Modo 17: Patrones de Turing (manchas, coral y laberintos que crecen con la música) ---
+vec3 turing(vec2 uv){
+  vec2 p = uv * (3.0 + u_iter * 0.5);
+  float t = u_time * 0.15, v = 0.0;
+  for (int i = 0; i < 6; i++){
+    float a = float(i) * 1.0472 + 0.3 * sin(t + float(i));
+    v += cos(dot(p, vec2(cos(a), sin(a))) * 2.0 + t * (1.0 + float(i) * 0.2));
+  }
+  float th = 0.5 - u_audio * 0.9 - 0.3 * sin(t * 2.0);
+  float sp = smoothstep(th, th + 0.15, v);
+  return pal(v * 0.15 + u_time * 0.03) * (sp * 1.1 + 0.08) + pal(0.7) * 0.5 * exp(-pow((v - th) * 7.0, 2.0));
+}
+
+// --- Modo 18: Mandelbrot con zoom (entra y sale en bucle) ---
+vec3 mandel(vec2 uv){
+  float cyc = abs(fract(u_time * 0.02) * 2.0 - 1.0);
+  vec2 c = vec2(-0.743643887037151, 0.131825904205330) + uv * 1.6 * exp(-cyc * 7.0), z = vec2(0.0);
+  float n = 0.0, lim = 80.0 + cyc * 110.0;
+  for (int i = 0; i < 200; i++){
+    if (float(i) >= lim || dot(z, z) > 256.0) break;
+    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c; n += 1.0;
+  }
+  float sm = n + 1.0 - log2(max(0.5 * log2(max(dot(z, z), 1.0001)), 0.001));
+  return n >= lim ? vec3(0.0) : pal(sm * 0.03 + u_time * 0.02 + u_audio * 0.3) * 1.2;
+}
+
 // --- Modo 9: Metaballs ---
 vec3 metaballs(vec2 uv){
   float f = 0.0; vec3 acc = vec3(0.0);
@@ -625,7 +691,11 @@ void main(){
   else if (u_mode < 11.5) col = universe(uv);
   else if (u_mode < 12.5) col = specmandala(uv);
   else if (u_mode < 13.5) col = scope(uv);
-  else                   col = terrain(uv);
+  else if (u_mode < 14.5) col = terrain(uv);
+  else if (u_mode < 15.5) col = aurora(uv);
+  else if (u_mode < 16.5) col = blackhole(uv);
+  else if (u_mode < 17.5) col = turing(uv);
+  else                   col = mandel(uv);
 
   // Saturación y brillo
   float lum = dot(col, vec3(0.299, 0.587, 0.114));
@@ -807,6 +877,10 @@ const presets = {
   '🎚 Espectro': { mode: 12, speed: 1, rotation: 0.05, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0,   cspeed: 0.15, sat: 1.3, bright: 1.1, trail: 0.4 },
   '〰️ Onda':     { mode: 13, speed: 1, rotation: 0,    zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0.5, cspeed: 0.2,  sat: 1.3, bright: 1.1, trail: 0.55 },
   '🏔 Montañas': { mode: 14, speed: 1, rotation: 0,    zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, hue: 0.8, cspeed: 0.1,  sat: 1.2, bright: 1.1, trail: 0.2 },
+  '🌌 Aurora':   { mode: 15, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.4, trail: 0.35 },
+  '🕳 Horizonte': { mode: 16, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.1, trail: 0.3 },
+  '🐆 Turing':   { mode: 17, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.6, trail: 0.55 },
+  '🔬 Zoom':     { mode: 18, speed: 1, rotation: 0, zoom: 1, pulse: 0.1, segments: 1, iter: 4, distort: 0, cspeed: 0.1, sat: 1.3, bright: 1.1, hue: 0.3, trail: 0.1 },
   '🌠 Flujo':    { mode: 10, speed: 1,  rotation: 0,    zoom: 1,   pulse: 0.1, segments: 1, iter: 5, distort: 0,   hue: 0.5, cspeed: 0.3, sat: 1.3, bright: 1,   trail: 0.4 },
 };
 const presetBox = document.getElementById('presets');
@@ -817,7 +891,7 @@ Object.entries(presets).forEach(([name, cfg]) => {
 });
 
 // Transición suave entre configuraciones
-let targets = null, tgtRef = null, tweenAge = 0;
+let targets = null, tgtRef = null, tweenAge = 0, tweenRate = 3, tweenMax = 3;
 function applyConfig(cfg){
   if (cfg.mode !== undefined) setMode(cfg.mode);
   targets = { ...cfg }; delete targets.mode;
@@ -827,7 +901,7 @@ function randomize(){
   if (Math.random() < 0.6) setPal(Math.floor(Math.random() * PALS.length));
   const r = (a, b) => a + Math.random() * (b - a);
   applyConfig({
-    mode: Math.floor(Math.random() * 15),
+    mode: Math.floor(Math.random() * NM),
     speed: r(0.3, 2), rotation: r(-0.6, 0.6), zoom: r(0.5, 2), pulse: r(0, 0.6),
     segments: Math.floor(r(1, 13)), iter: Math.floor(r(2, 8)), distort: r(0, 1.2),
     hue: Math.random(), cspeed: r(0, 0.8), sat: r(0.8, 1.6), bright: r(0.8, 1.4), trail: r(0, 0.6)
@@ -838,7 +912,9 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','Busca tu visión y compártela':'Find your vision and share it','Prueba otra de nuestras apps':'Try another of our apps','✨ Novedades':'✨ What’s new','Entendido':'Got it','🧬 Mutar preset':'🧬 Mutate preset','🎚 Mandala espectral':'🎚 Spectral Mandala','〰️ Osciloscopio y Lissajous':'〰️ Oscilloscope & Lissajous','🏔 Montañas de espectro':'🏔 Spectrum Mountains',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🌌 Aurora boreal':'🌌 Aurora Borealis','🕳 Agujero negro':'🕳 Black Hole','🐆 Patrones de Turing':'🐆 Turing Patterns','🔬 Mandelbrot en zoom':'🔬 Mandelbrot Zoom',
+ '🌌 Aurora':'🌌 Aurora','🕳 Horizonte':'🕳 Horizon','🐆 Turing':'🐆 Turing','🔬 Zoom':'🔬 Zoom','Escenas':'Scenes','➕ Añadir escena':'➕ Add scene','▶ Reproducir escenas':'▶ Play scenes','⏹ Detener escenas':'⏹ Stop scenes',
+ 'Todavía no hay escenas. Guarda presets y añádelos aquí.':'No scenes yet. Save presets and add them here.','🏷 Marca de agua':'🏷 Watermark','Duración (s)':'Duration (s)','Transición (s)':'Transition (s)','Busca tu visión y compártela':'Find your vision and share it','Prueba otra de nuestras apps':'Try another of our apps','✨ Novedades':'✨ What’s new','Entendido':'Got it','🧬 Mutar preset':'🧬 Mutate preset','🎚 Mandala espectral':'🎚 Spectral Mandala','〰️ Osciloscopio y Lissajous':'〰️ Oscilloscope & Lissajous','🏔 Montañas de espectro':'🏔 Spectrum Mountains',
  '🎚 Espectro':'🎚 Spectrum','〰️ Onda':'〰️ Wave','🏔 Montañas':'🏔 Mountains','Ganancia graves':'Bass gain','Ganancia medios':'Mid gain','Ganancia agudos':'Treble gain','Compuerta de ruido':'Noise gate','Copiar enlace':'Copy link','Exportar este preset':'Export this preset','⬇ Exportar presets':'⬇ Export presets','⬆ Importar presets':'⬆ Import presets',
  'No hay presets para exportar.':'There are no presets to export.','No se encontraron presets válidos.':'No valid presets found.','Enlace copiado':'Link copied','Copia este enlace:':'Copy this link:',
  'Preset compartido cargado':'Shared preset loaded','Filtros':'Filters','Aberración cromática':'Chromatic aberration','Grano de película':'Film grain','Líneas de escaneo':'Scanlines','Viñeta':'Vignette',
@@ -862,6 +938,7 @@ const TR = {
  'No se pudo capturar el audio: ':'Could not capture audio: ','Tu navegador no soporta Web MIDI (usa Chrome o Edge).':'Your browser does not support Web MIDI (use Chrome or Edge).',
  'Tu navegador no puede grabar video.':'Your browser cannot record video.','No se pudo activar el giroscopio.':'Could not enable the gyroscope.'
 };
+const NM = 19;   // cantidad de modos
 const REV = {}; Object.keys(TR).forEach(k => REV[TR[k]] = k);
 let lang = (navigator.language || 'es').toLowerCase().startsWith('es') ? 'es' : 'en';
 const tr = s => (lang === 'en' && TR[s]) || s;
@@ -870,7 +947,7 @@ const tr = s => (lang === 'en' && TR[s]) || s;
 const audioEl = document.getElementById('audio');
 const volEl = document.getElementById('vol');
 let actx = null, analyser = null, fft = null, musicGain = null, mediaSrc = null, recDest = null;
-let gated = false, audioLevel = 0, bass = 0, mid = 0, treble = 0, beat = 0;
+var bpmV = 0, beatTs = []; let gated = false, audioLevel = 0, bass = 0, mid = 0, treble = 0, beat = 0;
 let bassAvg = 0, lastBass = 0, lastBeatT = 0, beatFlag = false;
 
 function ensureCtx(){
@@ -904,6 +981,12 @@ function bandAvg(lo, hi){
   return s / ((i1 - i0 + 1) * 255);
 }
 
+function trackBpm(t){
+  beatTs.push(t); if (beatTs.length > 17) beatTs.shift();
+  if (beatTs.length < 6) return;
+  const iv = beatTs.slice(1).map((x, i) => x - beatTs[i]).sort((a, b) => a - b); let b = 60 / iv[iv.length >> 1];
+  while (b < 70) b *= 2; while (b > 190) b /= 2; bpmV = Math.round(b);
+}
 function updateAudio(dt, now){
   beatFlag = false;
   if (!analyser) { audioLevel *= 0.9; bass = mid = treble = 0; beat *= 0.9; return; }
@@ -920,7 +1003,7 @@ function updateAudio(dt, now){
   bassAvg += (bass - bassAvg) * Math.min(1, dt * 1.5);
   const t = now / 1000;
   if (bass > bassAvg * 1.2 + 0.05 && bass > lastBass && t - lastBeatT > 0.22) {
-    beat = 1; lastBeatT = t; beatFlag = true;
+    beat = 1; lastBeatT = t; beatFlag = true; trackBpm(t);
   }
   lastBass = bass;
   beat *= Math.exp(-dt * 5);
@@ -1002,7 +1085,7 @@ function setTitle(){
 }
 function updateTime(){
   const d = audioEl.duration;
-  tmEl.textContent = fmt(audioEl.currentTime) + ' / ' + fmt(d);
+  tmEl.textContent = fmt(audioEl.currentTime) + ' / ' + fmt(d) + (bpmV ? '  ♩' + bpmV : '');
   if (!seeking) seekEl.value = d ? audioEl.currentTime / d * 1000 : 0;
 }
 function renderList(){
@@ -1230,8 +1313,8 @@ window.addEventListener('keydown', e => {
   else if (k === 'h') togglePanel();
   else if (k === 'f') toggleFull();
   else if (k === 's') save();
-  else if (k === ']') setMode((P.mode + 1) % 15);
-  else if (k === '[') setMode((P.mode + 14) % 15);
+  else if (k === ']') setMode((P.mode + 1) % NM);
+  else if (k === '[') setMode((P.mode + NM - 1) % NM);
   else if (k === 'p') togglePlay();
   else if (k === 'm') toggleDock();
   else if (k === 'n') nextTrack(false);
@@ -1288,12 +1371,23 @@ function addRipple(cx, cy){
 }
 
 // --- Grabación de video + audio ---
-let rec = null;
+let rec = null, wmOn = true;
 function toggleRec(btn){
   if (rec) { rec.stop(); return; }
   if (!window.MediaRecorder || !canvas.captureStream) { alert(tr('Tu navegador no puede grabar video.')); return; }
   ensureCtx();
-  const stream = canvas.captureStream(60);
+  let src = canvas;
+  if (wmOn) {   // marca de agua: se compone en un canvas aparte que es el que se graba
+    const wc = document.createElement('canvas'), x = wc.getContext('2d'); wc.width = canvas.width; wc.height = canvas.height; src = wc;
+    const loop = () => {
+      if (!rec) return; x.drawImage(canvas, 0, 0, wc.width, wc.height);
+      const fs = Math.round(wc.height * 0.028); x.font = '600 ' + fs + 'px system-ui, sans-serif'; x.textAlign = 'right'; x.textBaseline = 'bottom';
+      x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = fs * 0.4; x.fillStyle = 'rgba(255,255,255,.55)';
+      x.fillText('✦ Akasha Visions', wc.width - fs, wc.height - fs * 0.8); requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+  const stream = src.captureStream(60);
   recDest.stream.getAudioTracks().forEach(tk => stream.addTrack(tk));
   const mime = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
   const chunks = [];
@@ -1327,6 +1421,10 @@ Object.keys(sliders).forEach(id => sliders[id].input.addEventListener('dblclick'
 }));
 function onMidi(m){
   const [st, cc, val] = m.data;
+  if ((st & 0xF0) === 0x90 && val > 0) {   // notas: 36+ cambian de modo, el resto lanza una onda
+    if (cc >= 36 && cc < 36 + NM) setMode(cc - 36); else addRipple(Math.random() * innerWidth, Math.random() * innerHeight);
+    return;
+  }
   if ((st & 0xF0) !== 0xB0) return;
   if (midiLearn) {
     for (const k in midiMap) if (midiMap[k] === midiLearn) delete midiMap[k];
@@ -1391,17 +1489,20 @@ document.getElementById('wGo').onclick = () => { document.getElementById('warn')
 let store = { visual: {}, midi: {}, midiCur: {} };
 try { const s = JSON.parse(localStorage.getItem('akasha_presets_v1')); if (s) store = Object.assign(store, s); } catch (e) {}
 const saveStore = () => { try { localStorage.setItem('akasha_presets_v1', JSON.stringify(store)); } catch (e) {} };
+store.scenes = store.scenes || [];
 Object.assign(midiMap, store.midiCur);                       // recupera los controles MIDI ya asignados
 function persistMidi(){ store.midiCur = { ...midiMap }; saveStore(); }
 const savedIds = sliderIds.filter(id => id !== 'quality');   // la resolución depende del equipo, no se guarda
 const clamp = (id, v) => Math.min(sliders[id].def.max, Math.max(sliders[id].def.min, v));
+function thumb(){ const c = document.createElement('canvas'); c.width = 96; c.height = 54; c.getContext('2d').drawImage(canvas, 0, 0, 96, 54); return c.toDataURL('image/jpeg', 0.6); }
 function snapshot(){ const cfg = {}; savedIds.forEach(id => cfg[id] = +(+P[id]).toFixed(3)); return { mode: P.mode, pal: palIdx, cfg }; }
 const FX_IDS = ['ca', 'grain', 'scan', 'vig', 'bloom', 'glitch', 'pix', 'post', 'lens'], FX_OFF = Object.fromEntries(FX_IDS.map(k => [k, 0]));
-function loadVisual(pr){ setPal(pr.pal | 0); applyConfig({ ...FX_OFF, mode: pr.mode, ...pr.cfg }); }
+function loadVisual(pr){ tweenRate = 3; tweenMax = 3; setPal(pr.pal | 0); applyConfig({ ...FX_OFF, mode: pr.mode, ...pr.cfg }); }
 function cleanVisual(v){
   if (!v || typeof v !== 'object' || !Number.isFinite(v.mode)) return null;
   const cfg = {}; savedIds.forEach(id => { const x = v.cfg && v.cfg[id]; if (Number.isFinite(x)) cfg[id] = clamp(id, x); });
-  return { mode: Math.max(0, Math.min(modeSel.options.length - 1, v.mode | 0)), pal: Math.max(0, Math.min(PALS.length - 1, v.pal | 0)), cfg };
+  const th = typeof v.thumb === 'string' && /^data:image\/jpeg;base64,/.test(v.thumb) && v.thumb.length < 20000 ? v.thumb : undefined;
+  return { thumb: th, mode: Math.max(0, Math.min(modeSel.options.length - 1, v.mode | 0)), pal: Math.max(0, Math.min(PALS.length - 1, v.pal | 0)), cfg };
 }
 function cleanMidi(m){
   if (!m || typeof m !== 'object') return null;
@@ -1418,16 +1519,18 @@ function fillList(id, obj, onLoad, onDel, emptyMsg, extra){
     const x = document.createElement('button'); x.className = 'upx'; x.textContent = '✕'; x.title = tr('Borrar');
     x.onclick = () => { if (confirm(tr('¿Borrar ') + '"' + n + '"?')) { onDel(n); saveStore(); renderLists(); } };
     const ex = (extra || []).map(([ic, ti, fn]) => { const e = document.createElement('button'); e.className = 'upx'; e.textContent = ic; e.title = tr(ti); e.onclick = () => fn(n); return e; });
-    row.append(b, ...ex, x); box.appendChild(row);
+    const th = obj[n] && obj[n].thumb ? Object.assign(new Image(), { src: obj[n].thumb, className: 'upt' }) : null;
+    row.append(...(th ? [th] : []), b, ...ex, x); box.appendChild(row);
   });
 }
 function renderLists(){
   fillList('userPresets', store.visual, n => loadVisual(store.visual[n]), n => { delete store.visual[n]; }, 'Todavía no hay presets guardados',
     [['🔗', 'Copiar enlace', shareLink], ['⬇', 'Exportar este preset', n => exportVisual([n])]]);
+  renderScenes();
   fillList('midiPresets', store.midi, n => { for (const k in midiMap) delete midiMap[k]; Object.assign(midiMap, store.midi[n]); persistMidi(); }, n => { delete store.midi[n]; }, 'Sin mapeos MIDI guardados');
 }
 function readName(id){ const el = document.getElementById(id), n = el.value.trim().slice(0, 24); if (!n || n === '__proto__') { el.focus(); return null; } return { el, n }; }
-document.getElementById('upSave').onclick = () => { const r = readName('upName'); if (!r) return; store.visual[r.n] = snapshot(); saveStore(); renderLists(); r.el.value = ''; };
+document.getElementById('upSave').onclick = () => { const r = readName('upName'); if (!r) return; store.visual[r.n] = { ...snapshot(), thumb: thumb() }; saveStore(); renderLists(); r.el.value = ''; };
 document.getElementById('mpSave').onclick = () => {
   if (!Object.keys(midiMap).length) { alert(tr('Aún no has asignado controles MIDI (doble clic en un slider y mueve una perilla).')); return; }
   const r = readName('mpName'); if (!r) return; store.midi[r.n] = { ...midiMap }; saveStore(); renderLists(); r.el.value = '';
@@ -1470,7 +1573,7 @@ document.getElementById('upFile').onchange = e => { const f = e.target.files[0];
 
 // Compartir un preset como enlace: viaja dentro de la dirección (#p=...)
 function shareLink(n){
-  const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify({ n, ...store.visual[n] })))));
+  const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify((({ thumb, ...r }) => ({ n, ...r }))(store.visual[n]))))));
   const fallback = () => prompt(tr('Copia este enlace:'), url);
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(() => toast(tr('Enlace copiado')), fallback); else fallback();
 }
@@ -1485,6 +1588,59 @@ function applyHash(){
 }
 setTimeout(applyHash, 400); addEventListener('hashchange', applyHash);
 renderLists();
+
+// --- Modo escenas: una lista de presets que se reproduce como un set ---
+var sceneRun = null;
+function renderScenes(){
+  const pick = document.getElementById('scPick'), box = document.getElementById('sceneList'), cur = pick.value;
+  pick.innerHTML = ''; Object.keys(store.visual).forEach(n => pick.add(new Option(n, n))); if ([...pick.options].some(o => o.value === cur)) pick.value = cur;
+  box.innerHTML = '';
+  if (!store.scenes.length) { const d = document.createElement('div'); d.className = 'none'; d.textContent = tr('Todavía no hay escenas. Guarda presets y añádelos aquí.'); box.appendChild(d); return; }
+  store.scenes.forEach((sc, i) => {
+    const row = document.createElement('div'); row.className = 'up';
+    const b = document.createElement('button'); b.className = 'upb' + (sceneRun && sceneRun.i === i ? ' on' : ''); b.textContent = (i + 1) + '. ' + sc.n + ' · ' + sc.s + 's';
+    b.onclick = () => { if (store.visual[sc.n]) loadVisual(store.visual[sc.n]); };
+    const x = document.createElement('button'); x.className = 'upx'; x.textContent = '✕';
+    x.onclick = () => { store.scenes.splice(i, 1); saveStore(); renderScenes(); };
+    row.append(b, x); box.appendChild(row);
+  });
+}
+function stopScenes(){ sceneRun = null; document.getElementById('scPlay').textContent = tr('▶ Reproducir escenas'); renderScenes(); }
+function sceneTick(dt){
+  if (!sceneRun) return;
+  sceneRun.t -= dt; if (sceneRun.t > 0) return;
+  const L = store.scenes;
+  for (let k = 0; k < L.length; k++) {
+    sceneRun.i = (sceneRun.i + 1) % L.length; const sc = L[sceneRun.i], v = store.visual[sc.n];
+    if (v) { loadVisual(v); tweenRate = 3 / Math.max(0.3, sc.t); tweenMax = Math.max(3, sc.t * 1.5 + 1); sceneRun.t = sc.s; renderScenes(); return; }
+  }
+  stopScenes();
+}
+document.getElementById('scAdd').onclick = () => {
+  const n = document.getElementById('scPick').value; if (!n) { toast(tr('Todavía no hay escenas. Guarda presets y añádelos aquí.')); return; }
+  const num = (id, a, b, d) => Math.min(b, Math.max(a, parseFloat(document.getElementById(id).value) || d));
+  store.scenes.push({ n, s: num('scSecs', 3, 600, 20), t: num('scTr', 0.5, 10, 2) }); saveStore(); renderScenes();
+};
+document.getElementById('scPlay').onclick = () => {
+  if (sceneRun) { stopScenes(); return; }
+  if (!store.scenes.length) return;
+  sceneRun = { i: -1, t: 0 }; document.getElementById('scPlay').textContent = tr('⏹ Detener escenas');
+};
+document.getElementById('btnWM').onclick = e => { wmOn = !wmOn; e.currentTarget.classList.toggle('active', wmOn); };
+renderScenes();
+
+// --- Gamepad: palancas = mover/rotar/zoom; A aleatorio, B onda, X mutar, LB/RB modo, Start panel ---
+var gpPrev = [];
+function pollPad(dt){
+  const gp = navigator.getGamepads ? [...navigator.getGamepads()].find(g => g) : null; if (!gp) return;
+  const ax = v => Math.abs(v) > 0.15 ? v : 0;
+  offset[0] += ax(gp.axes[0] || 0) * dt * 0.8; offset[1] -= ax(gp.axes[1] || 0) * dt * 0.8; rotA += ax(gp.axes[2] || 0) * dt * 1.2;
+  const zv = ax(gp.axes[3] || 0), zd = sliders.zoom.def; if (zv) setParam('zoom', Math.min(zd.max, Math.max(zd.min, P.zoom * (1 - zv * dt * 1.2))));
+  const hit = i => gp.buttons[i] && gp.buttons[i].pressed && !gpPrev[i];
+  if (hit(0)) randomize(); if (hit(1)) addRipple(innerWidth / 2, innerHeight / 2); if (hit(2)) document.getElementById('btnMutate').click();
+  if (hit(5)) setMode((P.mode + 1) % NM); if (hit(4)) setMode((P.mode + NM - 1) % NM); if (hit(9)) togglePanel();
+  gpPrev = gp.buttons.map(b => b.pressed);
+}
 
 // --- Demostración: recorre los 12 modos al ritmo de la canción ---
 const DEMO_URL = 'https://raw.githubusercontent.com/HighDimensionApps/Akasha-Visions/main/Calma%20Profunda.mp3';
@@ -1617,7 +1773,7 @@ document.getElementById('instClose').onclick = () => document.getElementById('in
 
 const qs = new URLSearchParams(location.search), kiosk = qs.has('clean');
 // --- Novedades (se muestran una vez por versión, después del aviso de seguridad) ---
-const NEWS_KEY = 'akasha_news_v2';
+const NEWS_KEY = 'akasha_news_v3';
 function showNews(){
   if (kiosk) return;
   try { if (localStorage.getItem(NEWS_KEY)) return; } catch (e) {}
@@ -1657,7 +1813,7 @@ document.getElementById('btnMutate').onclick = () => {
 // --- Secciones desplegables (el estado se recuerda) ---
 function wrapSections(root){
   let saved = {}; try { saved = JSON.parse(localStorage.getItem('akasha_sections')) || {}; } catch (e) {}
-  const closedDef = ['Geometría', 'Color', 'Filtros', 'Sistema', 'Presets', 'Mis presets', 'Presets MIDI', 'Herramientas'], stop = ['sliders', 'help', 'credits'];
+  const closedDef = ['Escenas', 'Geometría', 'Color', 'Filtros', 'Sistema', 'Presets', 'Mis presets', 'Presets MIDI', 'Herramientas'], stop = ['sliders', 'help', 'credits'];
   let body = null;
   [...root.children].forEach(el => {
     if (el.classList.contains('section')) {
@@ -1709,12 +1865,12 @@ function frame(now){
     for (const k in targets) {
       const cur = P[k], tgt = targets[k];
       if (sliders[k].def.step >= 1) { setParam(k, tgt); delete targets[k]; continue; }
-      let nv = cur + (tgt - cur) * Math.min(1, dt * 3);
+      let nv = cur + (tgt - cur) * Math.min(1, dt * tweenRate);
       if (Math.abs(tgt - nv) < 0.005) nv = tgt; else done = false;
       setParam(k, nv);
     }
-    if (tweenAge > 3) for (const k in targets) setParam(k, targets[k]);
-    if (done || tweenAge > 3) targets = null;
+    if (tweenAge > tweenMax) for (const k in targets) setParam(k, targets[k]);
+    if (done || tweenAge > tweenMax) targets = null;
   }
 
   // Auto-mutación cada 8 segundos
@@ -1726,7 +1882,7 @@ function frame(now){
   }
 
   updateAudio(dt, now);
-  demoTick();
+  demoTick(); sceneTick(dt); pollPad(dt);
   const rx = P.react * (safe ? 0.3 : 1);
   if (gyroOn && !dragging) { offset[0] += (gyroT[0] * 0.8 - offset[0]) * 0.1; offset[1] += (gyroT[1] * 0.8 - offset[1]) * 0.1; }
   rips.forEach((r, i) => { if (r.t >= 0) { r.t += dt; if (r.t > 3) r.t = -1; } ripArr[i * 3] = r.x; ripArr[i * 3 + 1] = r.y; ripArr[i * 3 + 2] = r.t; });
@@ -1734,7 +1890,7 @@ function frame(now){
   if (!paused) {
     time  += dt * Math.min(P.speed, safe ? 1.2 : 99) * (1 + audioLevel);
     ctime += dt * P.cspeed * 0.2;
-    rotA = (P.mode === 13 || P.mode === 14) ? 0 : rotA + dt * (P.rotation + beat * rx * 0.8);   // osciloscopio y montañas se quedan derechos
+    rotA = (P.mode >= 13 && P.mode <= 16) ? 0 : rotA + dt * (P.rotation + beat * rx * 0.8);   // osciloscopio, montañas, aurora y agujero negro se quedan derechos
   }
 
   gl.uniform2f(U.u_res, canvas.width, canvas.height);
