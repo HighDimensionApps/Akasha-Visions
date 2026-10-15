@@ -149,6 +149,8 @@
   .try { margin-top: 12px; color: #ccc; }
   .applink { display: block; margin-top: 6px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.2); line-height: 0; }
   .applink img { width: 100%; height: auto; display: block; } .applink:hover { filter: brightness(1.15); }
+  #perf { display: none; position: fixed; top: 10px; left: 12px; z-index: 6; pointer-events: none; padding: 4px 9px; border-radius: 8px; font: 12px monospace; color: #0f8; background: rgba(0,0,0,.5); }
+  #perf.on { display: block; }
   .upt { width: 48px; height: 27px; object-fit: cover; border-radius: 4px; flex: none; }
   .pclose { width: 30px; height: 30px; padding: 0; flex: none; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
@@ -162,11 +164,12 @@
 </head>
 <body class="panel-open">
 <canvas id="c"></canvas>
+<div id="perf"></div>
 <div id="songfx"></div>
 <div id="demoTag"></div>
 <div id="news" class="gone"><div class="box" style="max-height:82vh;overflow:auto">
   <h2>✨ Novedades</h2>
-  <div data-en="<ul><li>🎚 <b>Modulation matrix</b>: audio bands and LFOs drive any parameter · 🔀 blend two modes · ♩ scenes by bars · 🚢 Burning Ship and 🌀 Newton</li><li>🌌 <b>New modes</b>: aurora borealis, black hole, Turing patterns and Mandelbrot zoom</li><li>🎞 <b>Scenes</b>: order presets and play them as a set, with duration and transition</li><li>🖼 Thumbnails on your presets · 🏷 optional watermark on recordings</li><li>🎮 Gamepad and MIDI notes · ♩ BPM in the player</li><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🎚 <b>Matriz de modulación</b>: las bandas de audio y los LFO mueven cualquier parámetro · 🔀 mezcla dos modos · ♩ escenas por compases · 🚢 Burning Ship y 🌀 Newton</li><li>🌌 <b>Nuevos modos</b>: aurora boreal, agujero negro, patrones de Turing y Mandelbrot en zoom</li><li>🎞 <b>Escenas</b>: ordena presets y reprodúcelos como un set, con duración y transición</li><li>🖼 Miniaturas en tus presets · 🏷 marca de agua opcional en las grabaciones</li><li>🎮 Gamepad y notas MIDI · ♩ BPM en el reproductor</li><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
+  <div data-en="<ul><li>🔷 <b>Hyperbolic geometry</b> · 🎬 Demo 2 with the new visuals · 📊 optional FPS counter · 🔋 <b>power-saving mode</b> for modest devices</li><li>🎚 <b>Modulation matrix</b>: audio bands and LFOs drive any parameter · 🔀 blend two modes · ♩ scenes by bars · 🚢 Burning Ship and 🌀 Newton</li><li>🌌 <b>New modes</b>: aurora borealis, black hole, Turing patterns and Mandelbrot zoom</li><li>🎞 <b>Scenes</b>: order presets and play them as a set, with duration and transition</li><li>🖼 Thumbnails on your presets · 🏷 optional watermark on recordings</li><li>🎮 Gamepad and MIDI notes · ♩ BPM in the player</li><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🔷 <b>Geometría hiperbólica</b> · 🎬 Demo 2 con las visuales nuevas · 📊 contador de FPS opcional · 🔋 <b>modo ahorro</b> para equipos modestos</li><li>🎚 <b>Matriz de modulación</b>: las bandas de audio y los LFO mueven cualquier parámetro · 🔀 mezcla dos modos · ♩ escenas por compases · 🚢 Burning Ship y 🌀 Newton</li><li>🌌 <b>Nuevos modos</b>: aurora boreal, agujero negro, patrones de Turing y Mandelbrot en zoom</li><li>🎞 <b>Escenas</b>: ordena presets y reprodúcelos como un set, con duración y transición</li><li>🖼 Miniaturas en tus presets · 🏷 marca de agua opcional en las grabaciones</li><li>🎮 Gamepad y notas MIDI · ♩ BPM en el reproductor</li><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
   <div class="btns" style="grid-template-columns:1fr"><button id="newsClose">Entendido</button></div>
 </div></div>
 <div id="inst" class="gone"><div class="box">
@@ -270,6 +273,8 @@
     <button id="btnFxOff">🧼 Quitar filtros</button>
     <button id="btnWM" class="active">🏷 Marca de agua</button>
     <button id="btnSecond">🪟 Segunda pantalla</button>
+    <button id="btnPerf">📊 FPS y resolución</button>
+    <button id="btnLite" class="wide">🔋 Modo ahorro</button>
   </div>
 
   <div class="section">Acciones</div>
@@ -335,7 +340,7 @@ uniform vec2  u_offset;
 uniform float u_time, u_ctime, u_rot;
 uniform float u_mode, u_zoom, u_seg, u_iter, u_hue, u_sat, u_bright;
 uniform float u_distort, u_pulse, u_trail, u_audio, u_mid, u_treble, u_beat, u_fbrot, u_fbzoom;
-uniform sampler2D u_prev, u_spec; uniform float u_sg, u_mode2, u_mix;
+uniform sampler2D u_prev, u_spec; uniform float u_sg, u_mode2, u_mix, u_lite;
 uniform vec3 u_pa, u_pb, u_pc, u_pd, u_rip[4];
 
 const float PI = 3.14159265;
@@ -427,7 +432,7 @@ vec2 hash2(vec2 p){ p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.
 vec3 julia(vec2 uv){
   vec2 z = uv * (1.4 + 0.3 * sin(u_time * 0.2));
   vec2 c = 0.7885 * vec2(cos(u_time * 0.3 + u_audio), sin(u_time * 0.3 + u_audio));
-  float n = 0.0, lim = u_iter * 6.0 + 6.0;
+  float n = 0.0, lim = (u_iter * 6.0 + 6.0) * (1.0 - 0.4 * u_lite);
   for (int i = 0; i < 64; i++){
     if (float(i) >= lim || dot(z, z) > 16.0) break;
     z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
@@ -484,6 +489,7 @@ vec3 sacred(vec2 uv){
   vec2 mq = rot(-u_time * 0.1) * uv * 1.7;
   float mm = 1e3, mc = 1e3;
   for (int i = 0; i < 13; i++){
+    if (u_lite > 0.5 && i > 6) break;
     vec2 a = mp(float(i));
     mc = min(mc, abs(length(mq - a) - 0.5));
     for (int j = 0; j < 13; j++){ if (j <= i) continue; mm = min(mm, seg(mq, a, mp(float(j)))); }
@@ -511,7 +517,7 @@ vec3 sponge(vec2 uv){
   float t = 0.0, st = 0.0;
   for (int i = 0; i < 56; i++){
     float d = mapS(ro + rd * t);
-    if (d < 0.002 || t > 9.0) break;
+    if (d < 0.002 || t > 9.0 || float(i) > 56.0 - u_lite * 28.0) break;
     t += d; st += 1.0;
   }
   vec3 col = pal(u_time * 0.1) * 0.05;
@@ -604,7 +610,7 @@ vec3 escape(vec2 uv, float ship){
   if (ship > 0.5) uv.y = -uv.y;
   float cyc = abs(fract(u_time * 0.02) * 2.0 - 1.0);
   vec2 c = mix(vec2(-0.743643887037151, 0.131825904205330), vec2(-1.7443359375, -0.017451171875), ship) + uv * 1.6 * exp(-cyc * 7.0), z = vec2(0.0);
-  float n = 0.0, lim = 80.0 + cyc * 110.0;
+  float n = 0.0, lim = (80.0 + cyc * 110.0) * (1.0 - 0.45 * u_lite);
   for (int i = 0; i < 200; i++){
     if (float(i) >= lim || dot(z, z) > 256.0) break;
     if (ship > 0.5) z = abs(z);
@@ -648,6 +654,7 @@ vec3 hyper(vec2 uv){
   z = cdiv(z - a, vec2(1.0, 0.0) - cmul(vec2(a.x, -a.y), z));
   vec2 z0 = z; float folds = 0.0;
   for (int i = 0; i < 24; i++){                                                       // se pliega todo al triángulo fundamental
+    if (float(i) > 24.0 - 10.0 * u_lite) break;
     if (z.y < 0.0){ z.y = -z.y; folds += 1.0; }
     float dn = dot(z, n); if (dn > 0.0){ z -= 2.0 * dn * n; folds += 1.0; }
     vec2 w = z - C; float d2 = dot(w, w); if (d2 < r * r){ z = C + w * (r * r / d2); folds += 1.0; }
@@ -684,7 +691,7 @@ vec2 flowv(vec2 p){
 }
 vec3 flowp(vec2 uv){
   vec2 p = uv * 1.6; vec3 col = vec3(0.0);
-  float n = min(u_iter * 2.0 + 8.0, 28.0);
+  float n = min(u_iter * 2.0 + 8.0, 28.0) * (1.0 - 0.4 * u_lite);
   for (int i = 0; i < 28; i++){
     if (float(i) >= n) break;
     p += flowv(p) * 0.035 * (1.0 + u_audio);
@@ -847,7 +854,7 @@ gl.useProgram(prog);
 
 const U = {};
 ['u_res','u_offset','u_time','u_ctime','u_rot','u_mode','u_zoom','u_seg','u_iter','u_hue',
- 'u_sat','u_bright','u_distort','u_pulse','u_trail','u_audio','u_mid','u_treble','u_beat','u_prev','u_pa','u_pb','u_pc','u_pd','u_rip','u_fbrot','u_fbzoom','u_spec','u_sg','u_mode2','u_mix'].forEach(n => U[n] = gl.getUniformLocation(prog, n));
+ 'u_sat','u_bright','u_distort','u_pulse','u_trail','u_audio','u_mid','u_treble','u_beat','u_prev','u_pa','u_pb','u_pc','u_pd','u_rip','u_fbrot','u_fbzoom','u_spec','u_sg','u_mode2','u_mix','u_lite'].forEach(n => U[n] = gl.getUniformLocation(prog, n));
 
 // ==================== PARÁMETROS ====================
 const P = { mode: 0 };
@@ -986,7 +993,8 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🔷 Geometría hiperbólica':'🔷 Hyperbolic Geometry','🔷 Hiperbólico':'🔷 Hyperbolic','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','📊 FPS y resolución':'📊 FPS & resolution','🔋 Modo ahorro':'🔋 Power-saving mode','Modo ahorro activado: 30 FPS, menos resolución y efectos':'Power-saving on: 30 FPS, lower resolution and effects','Modo ahorro desactivado':'Power-saving off',
+ 'Rendimiento bajo: prueba el modo 🔋 ahorro (Herramientas)':'Low performance: try 🔋 power-saving mode (Tools)','🔷 Geometría hiperbólica':'🔷 Hyperbolic Geometry','🔷 Hiperbólico':'🔷 Hyperbolic','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
  'Graves':'Bass','Medios':'Mid','Agudos':'High','Volumen':'Level','➕ Añadir':'➕ Add','Sin modulaciones. Añade una arriba.':'No modulations. Add one above.','Cantidad (%)':'Amount (%)','compases':'bars','Duración en segundos o en compases':'Duration in seconds or bars','🌌 Aurora boreal':'🌌 Aurora Borealis','🕳 Agujero negro':'🕳 Black Hole','🐆 Patrones de Turing':'🐆 Turing Patterns','🔬 Mandelbrot en zoom':'🔬 Mandelbrot Zoom',
  '🌌 Aurora':'🌌 Aurora','🕳 Horizonte':'🕳 Horizon','🐆 Turing':'🐆 Turing','🔬 Zoom':'🔬 Zoom','Escenas':'Scenes','➕ Añadir escena':'➕ Add scene','▶ Reproducir escenas':'▶ Play scenes','⏹ Detener escenas':'⏹ Stop scenes',
  'Todavía no hay escenas. Guarda presets y añádelos aquí.':'No scenes yet. Save presets and add them here.','🏷 Marca de agua':'🏷 Watermark','Duración (s)':'Duration (s)','Transición (s)':'Transition (s)','Busca tu visión y compártela':'Find your vision and share it','Prueba otra de nuestras apps':'Try another of our apps','✨ Novedades':'✨ What’s new','Entendido':'Got it','🧬 Mutar preset':'🧬 Mutate preset','🎚 Mandala espectral':'🎚 Spectral Mandala','〰️ Osciloscopio y Lissajous':'〰️ Oscilloscope & Lissajous','🏔 Montañas de espectro':'🏔 Spectrum Mountains',
@@ -1480,10 +1488,12 @@ function toggleRec(btn){
 
 // --- Resolución dinámica y modo seguro ---
 let autoRes = true, lowT = 0, highT = 0, safe = false;
+var lite = false, liteSaved = 1, fpsNow = 0, perfOn = false, slowT = 0, hinted = false;
 function adaptRes(fps){
   if (!autoRes || rec) return;
-  if (fps < 40) { highT = 0; if (++lowT >= 2 && P.quality > 0.4) { setParam('quality', Math.max(0.4, +(P.quality - 0.1).toFixed(2))); lowT = 0; } }
-  else { lowT = 0; if (fps > 57 && P.quality < 1) { if (++highT >= 6) { setParam('quality', Math.min(1, +(P.quality + 0.05).toFixed(2))); highT = 0; } } else highT = 0; }
+  if (!lite && !hinted && P.quality <= 0.4 && fps < 28 && ++slowT >= 4) { hinted = true; toast(tr('Rendimiento bajo: prueba el modo 🔋 ahorro (Herramientas)')); }
+  if (fps < (lite ? 22 : 40)) { highT = 0; if (++lowT >= 2 && P.quality > 0.4) { setParam('quality', Math.max(0.4, +(P.quality - 0.1).toFixed(2))); lowT = 0; } }
+  else { lowT = 0; if (fps > (lite ? 28 : 57) && P.quality < (lite ? 0.6 : 1)) { if (++highT >= 6) { setParam('quality', Math.min(lite ? 0.6 : 1, +(P.quality + 0.05).toFixed(2))); highT = 0; } } else highT = 0; }
 }
 function setSafe(v){ safe = v; document.getElementById('btnSafe').classList.toggle('active', v); }
 
@@ -1744,6 +1754,15 @@ document.getElementById('scPlay').onclick = () => {
 };
 var scBars = false;
 document.getElementById('scUnit').onclick = e => { scBars = !scBars; e.currentTarget.textContent = scBars ? '♩ ' + tr('compases') : '⏱ s'; document.getElementById('scSecs').value = scBars ? 8 : 20; };
+const perfEl = document.getElementById('perf');
+function setLite(v){
+  lite = v; document.getElementById('btnLite').classList.toggle('active', v);
+  if (v) { liteSaved = P.quality; setParam('quality', Math.min(P.quality, 0.5)); autoRes = true; document.getElementById('btnRes').classList.add('active'); }
+  else setParam('quality', liteSaved);
+  toast(tr(v ? 'Modo ahorro activado: 30 FPS, menos resolución y efectos' : 'Modo ahorro desactivado'));
+}
+document.getElementById('btnLite').onclick = () => setLite(!lite);
+document.getElementById('btnPerf').onclick = e => { perfOn = !perfOn; perfEl.classList.toggle('on', perfOn); perfEl.textContent = '…'; e.currentTarget.classList.toggle('active', perfOn); };
 document.getElementById('btnWM').onclick = e => { wmOn = !wmOn; e.currentTarget.classList.toggle('active', wmOn); };
 renderScenes();
 
@@ -1909,7 +1928,7 @@ document.getElementById('instClose').onclick = () => document.getElementById('in
 
 const qs = new URLSearchParams(location.search), kiosk = qs.has('clean');
 // --- Novedades (se muestran una vez por versión, después del aviso de seguridad) ---
-const NEWS_KEY = 'akasha_news_v4';
+const NEWS_KEY = 'akasha_news_v5';
 function showNews(){
   if (kiosk) return;
   try { if (localStorage.getItem(NEWS_KEY)) return; } catch (e) {}
@@ -1970,6 +1989,8 @@ if (kiosk) {
   if (qs.has('safe')) setSafe(true); if (qs.has('auto')) toggleAuto();
   if (qs.has('mic')) startMic(document.getElementById('btnAudio'));
 }
+if (qs.has('lite')) setLite(true);          // ?lite = modo ahorro · ?fps = contador de FPS
+if (qs.has('fps')) document.getElementById('btnPerf').click();
 applyLang();
 
 // ==================== RESIZE ====================
@@ -1988,11 +2009,15 @@ let time = 0, ctime = 0, rotA = 0, prev = performance.now();
 let frames = 0, fpsTime = 0;
 
 function frame(now){
-  const dt = Math.min((now - prev) / 1000, 0.1); prev = now;
+  if (lite && now - prev < 28) { requestAnimationFrame(frame); return; }   // modo ahorro: ~30 FPS
+  const raw = (now - prev) / 1000, dt = Math.min(raw, 0.1); prev = now;
 
   // FPS
-  frames++; fpsTime += dt;
-  if (fpsTime > 1) { adaptRes(frames / fpsTime); frames = 0; fpsTime = 0; }
+  frames++; fpsTime += Math.min(raw, 1);   // tiempo real: así el contador no se infla en equipos lentos
+  if (fpsTime > 1) {
+    fpsNow = frames / fpsTime; adaptRes(fpsNow); frames = 0; fpsTime = 0;
+    if (perfOn) perfEl.textContent = Math.round(fpsNow) + ' FPS · ' + canvas.width + '×' + canvas.height + ' · ×' + (+P.quality).toFixed(2) + (lite ? ' · 🔋' : '');
+  }
 
   // Transición hacia preset (los enteros saltan directo; si algo la deja colgada, termina a los 3 s)
   if (targets !== tgtRef) { tgtRef = targets; tweenAge = 0; }
@@ -2035,7 +2060,7 @@ function frame(now){
   gl.uniform1f(U.u_ctime, ctime);
   gl.uniform1f(U.u_rot, rotA);
   applyMods(now);
-  gl.uniform1f(U.u_mode, P.mode); gl.uniform1f(U.u_mode2, +modeBSel.value); gl.uniform1f(U.u_mix, P.xfade);
+  gl.uniform1f(U.u_mode, P.mode); gl.uniform1f(U.u_mode2, +modeBSel.value); gl.uniform1f(U.u_mix, lite ? 0 : P.xfade); gl.uniform1f(U.u_lite, lite ? 1 : 0);
   gl.uniform1f(U.u_zoom, P.zoom);
   gl.uniform1f(U.u_seg, P.segments);
   gl.uniform1f(U.u_iter, P.iter);
@@ -2067,7 +2092,7 @@ function frame(now){
   gl.uniform1i(blitT, 0); gl.uniform2f(blitR, canvas.width, canvas.height);
   gl.uniform1f(BU.tm, time % 1000); gl.uniform1f(BU.bt, beat * rx);
   gl.uniform1f(BU.ca, P.ca); gl.uniform1f(BU.gr, P.grain * (safe ? 0.5 : 1)); gl.uniform1f(BU.sc, P.scan); gl.uniform1f(BU.px, P.pix);
-  gl.uniform1f(BU.gt, P.glitch * (safe ? 0.3 : 1)); gl.uniform1f(BU.ps, P.post); gl.uniform1f(BU.bl, P.bloom); gl.uniform1f(BU.vg, P.vig); gl.uniform1f(BU.fe, P.lens);
+  gl.uniform1f(BU.gt, P.glitch * (safe ? 0.3 : 1)); gl.uniform1f(BU.ps, P.post); gl.uniform1f(BU.bl, lite ? 0 : P.bloom); gl.uniform1f(BU.vg, P.vig); gl.uniform1f(BU.fe, P.lens);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
   gl.useProgram(prog);
   ti = 1 - ti; restoreMods();
@@ -2076,7 +2101,7 @@ function frame(now){
   const busy = (canHover && (panel.matches(':hover') || dock.matches(':hover'))) || plist.classList.contains('open') || seeking || dd;
   const idle = autoHideUI && now - lastMove > 5000 && !busy;
   document.body.classList.toggle('ui-idle', idle);
-  if (!idle && !dock.classList.contains('off')) { dock.style.setProperty('--beat', beat.toFixed(2)); drawSpec(); }
+  if (!idle && !dock.classList.contains('off')) { dock.style.setProperty('--beat', beat.toFixed(2)); if (!lite) drawSpec(); }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
