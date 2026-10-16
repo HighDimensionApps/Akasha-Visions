@@ -113,10 +113,10 @@
     0% { opacity: 0; transform: translateY(40px) scale(.4) rotate(-14deg); filter: blur(12px); }
     15% { opacity: 1; transform: none; filter: none; } 80% { opacity: 1; transform: none; }
     100% { opacity: 0; transform: translateY(-30px) scale(1.4); filter: blur(10px); } }
-  #warn, #inst, #news { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(0,0,0,.88); }
-  #warn.gone, #inst.gone, #news.gone { display: none; }
-  #warn .box, #inst .box, #news .box { max-width: 420px; margin: 16px; padding: 24px; border-radius: 16px; color: #eee; background: rgba(10,5,25,.95); border: 1px solid #a0f; box-shadow: 0 0 30px rgba(180,0,255,.4); }
-  #warn h2, #inst h2, #news h2 { font-size: 18px; margin-bottom: 10px; } #warn p, #inst p, #news p, #news li { font-size: 13px; line-height: 1.6; color: #ccc; margin-bottom: 14px; }
+  #warn, #inst, #news, #pnews { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(0,0,0,.88); }
+  #warn.gone, #inst.gone, #news.gone, #pnews.gone { display: none; }
+  #warn .box, #inst .box, #news .box, #pnews .box { max-width: 420px; margin: 16px; padding: 24px; border-radius: 16px; color: #eee; background: rgba(10,5,25,.95); border: 1px solid #a0f; box-shadow: 0 0 30px rgba(180,0,255,.4); }
+  #warn h2, #inst h2, #news h2, #pnews h2 { font-size: 18px; margin-bottom: 10px; } #warn p, #inst p, #news p, #news li, #pnews p, #pnews li { font-size: 13px; line-height: 1.6; color: #ccc; margin-bottom: 14px; }
   #credits { margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.1); text-align: center; font-size: 11px; color: #aaa; }
   #credits b { color: #fff; }
   #kofi { display: block; margin-top: 8px; padding: 9px; border-radius: 10px; color: #fff; text-decoration: none; font-size: 13px;
@@ -142,8 +142,8 @@
   .section { cursor: pointer; user-select: none; } .section::before { content: '▾ '; } .section.closed::before { content: '▸ '; } .sbody.closed { display: none; }
   .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; } .chip { padding: 4px 8px; font-size: 11px; border-radius: 12px; opacity: .7; }
   .chip.on { opacity: 1; background: rgba(255,0,200,.35); } .chip.on::before { content: '🔒 '; }
-  #news ul { margin: 0 0 14px 18px; } #news li { margin-bottom: 4px; }
-  body.kiosk { cursor: none; } body.kiosk #panel, body.kiosk #dock, body.kiosk #toggle, body.kiosk #demoTag, body.kiosk #songfx, body.kiosk #inst, body.kiosk #news, body.kiosk #warn { display: none !important; }
+  #news ul, #pnews ul { margin: 0 0 14px 18px; } #news li, #pnews li { margin-bottom: 4px; }
+  body.kiosk { cursor: none; } body.kiosk #panel, body.kiosk #dock, body.kiosk #toggle, body.kiosk #demoTag, body.kiosk #songfx, body.kiosk #inst, body.kiosk #news, body.kiosk #pnews, body.kiosk #warn { display: none !important; }
   canvas { touch-action: none; }
   .sub { font-size: 10px; letter-spacing: .5px; color: #c8f; margin-top: 3px; white-space: nowrap; }
   .try { margin-top: 12px; color: #ccc; }
@@ -151,6 +151,8 @@
   .applink img { width: 100%; height: auto; display: block; } .applink:hover { filter: brightness(1.15); }
   #perf { display: none; position: fixed; top: 10px; left: 12px; z-index: 6; pointer-events: none; padding: 4px 9px; border-radius: 8px; font: 12px monospace; color: #0f8; background: rgba(0,0,0,.5); }
   #perf.on { display: block; }
+  .quote { margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.08); font-size: 10.5px; line-height: 1.6; color: #9a8fb0; font-style: italic; text-align: center; }
+  .quote cite { display: block; margin-top: 6px; font-style: normal; font-size: 10px; color: #7d7396; }
   .upt { width: 48px; height: 27px; object-fit: cover; border-radius: 4px; flex: none; }
   .pclose { width: 30px; height: 30px; padding: 0; flex: none; }
   #dock.moved { transition: opacity .4s ease; } #dock.drag { transition: none; }
@@ -171,6 +173,11 @@
   <h2>✨ Novedades</h2>
   <div data-en="<ul><li>🔷 <b>Hyperbolic geometry</b> · 🎬 Demo 2 with the new visuals · 📊 optional FPS counter · 🔋 <b>power-saving mode</b> for modest devices</li><li>🎚 <b>Modulation matrix</b>: audio bands and LFOs drive any parameter · 🔀 blend two modes · ♩ scenes by bars · 🚢 Burning Ship and 🌀 Newton</li><li>🌌 <b>New modes</b>: aurora borealis, black hole, Turing patterns and Mandelbrot zoom</li><li>🎞 <b>Scenes</b>: order presets and play them as a set, with duration and transition</li><li>🖼 Thumbnails on your presets · 🏷 optional watermark on recordings</li><li>🎮 Gamepad and MIDI notes · ♩ BPM in the player</li><li>🎛 <b>Filters</b>: chromatic aberration, film grain, scanlines, glitch, pixelate and more</li><li>🎚 <b>Real-spectrum modes</b>: spectral mandala, oscilloscope and mountains</li><li>🎚 Per-band gain and noise gate</li><li>💾 Save your presets, export/import them, share them as links — example presets included</li><li>🎹 MIDI presets; your mappings are remembered</li><li>🪟 Second screen with visuals only</li><li>🎤 Pick your audio input and capture PC audio</li><li>🎬 Demo with a song · 🎥 MP4/WebM recording</li><li>🧬 <b>Mutate preset</b> with lockable parameters</li><li>🤏 <b>Touch gestures</b>: pinch to zoom, two fingers to rotate</li><li>🖥 <b>Kiosk mode</b>: add <code>?clean</code> to the URL (great for OBS)</li><li>📂 Control panel with collapsible sections</li></ul>"><ul><li>🔷 <b>Geometría hiperbólica</b> · 🎬 Demo 2 con las visuales nuevas · 📊 contador de FPS opcional · 🔋 <b>modo ahorro</b> para equipos modestos</li><li>🎚 <b>Matriz de modulación</b>: las bandas de audio y los LFO mueven cualquier parámetro · 🔀 mezcla dos modos · ♩ escenas por compases · 🚢 Burning Ship y 🌀 Newton</li><li>🌌 <b>Nuevos modos</b>: aurora boreal, agujero negro, patrones de Turing y Mandelbrot en zoom</li><li>🎞 <b>Escenas</b>: ordena presets y reprodúcelos como un set, con duración y transición</li><li>🖼 Miniaturas en tus presets · 🏷 marca de agua opcional en las grabaciones</li><li>🎮 Gamepad y notas MIDI · ♩ BPM en el reproductor</li><li>🎛 <b>Filtros</b>: aberración cromática, grano, líneas de escaneo, glitch, pixelado y más</li><li>🎚 <b>Modos con el espectro real</b>: mandala espectral, osciloscopio y montañas</li><li>🎚 Ganancia por banda y compuerta de ruido</li><li>💾 Guarda tus presets, expórtalos o impórtalos y compártelos por enlace; hay presets de ejemplo</li><li>🎹 Presets MIDI; tus mapeos se recuerdan</li><li>🪟 Segunda pantalla solo con las visuales</li><li>🎤 Elige tu entrada de audio y captura el audio del PC</li><li>🎬 Demo con una canción · 🎥 Grabación en MP4/WebM</li><li>🧬 <b>Mutar preset</b> con parámetros bloqueables</li><li>🤏 <b>Gestos táctiles</b>: pellizca para hacer zoom y dos dedos para rotar</li><li>🖥 <b>Modo kiosco</b>: añade <code>?clean</code> a la dirección (ideal para OBS)</li><li>📂 Panel con secciones desplegables</li></ul></div>
   <div class="btns" style="grid-template-columns:1fr"><button id="newsClose">Entendido</button></div>
+</div></div>
+<div id="pnews" class="gone"><div class="box" style="max-height:82vh;overflow:auto">
+  <h2>⚡ Mejoras de rendimiento</h2>
+  <div data-en="<ul><li>🧩 <b>One shader per mode</b>, compiled on demand: up to ~5× less GPU work on modest devices (measured with software rendering) and a faster start-up</li><li>🎯 <b>Automatic quality calibration</b>: the app tunes the resolution in 1–3 seconds to stay smooth, and phones start at a lower quality</li><li>💾 <b>It remembers the quality</b> your device settles at, so next time it starts smooth from the first second</li><li>🔋 <b>Power-saving mode</b> (30 FPS) and 📊 an optional FPS &amp; resolution counter</li><li>🖼 <b>Lighter screenshots and thumbnails</b>: frames are no longer kept in memory, which helps phones most</li><li>💡 If it feels slow, try power-saving mode or lower the Resolution slider</li></ul>"><ul><li>🧩 <b>Un shader por modo</b>, compilado al usarlo: hasta ~5× menos trabajo de GPU en equipos modestos (medido con render por software) y arranque más rápido</li><li>🎯 <b>Calibración automática de calidad</b>: la app ajusta la resolución en 1–3 segundos para mantener la fluidez, y los celulares parten de una calidad menor</li><li>💾 <b>Recuerda la calidad</b> a la que se estabiliza tu equipo, así que las próximas veces arranca fluida desde el primer segundo</li><li>🔋 <b>Modo ahorro</b> (30 FPS) y 📊 contador de FPS y resolución opcional</li><li>🖼 <b>Capturas y miniaturas más ligeras</b>: ya no se guarda cada fotograma en memoria, lo que ayuda sobre todo a los celulares</li><li>💡 Si va lento, prueba el modo ahorro o baja el slider de Resolución</li></ul></div>
+  <div class="btns" style="grid-template-columns:1fr"><button id="pnewsClose">Entendido</button></div>
 </div></div>
 <div id="inst" class="gone"><div class="box">
   <h2>📲 Instalar Akasha Visions</h2>
@@ -300,6 +307,7 @@
     <a id="kofi" href="https://ko-fi.com/highdimensionchannel" target="_blank" rel="noopener">☕ Invítame un café</a>
     <div class="try">Prueba otra de nuestras apps</div>
     <a class="applink" href="https://highdimensionapps.github.io/Dub-Transmuter/" target="_blank" rel="noopener"><img alt="Dub Transmuter – Virtual Sound System" src="data:image/png;base64,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"></a>
+    <div class="quote">Sí, las geometrías y los patrones numéricos se combinaron y fusionaron, se acoplaron y dieron nacimiento a otras geometrías y patrones sagrados. Y esas geometrías y patrones eran las expresiones de Los Principios Divinos de la Forma en el Espacio. Porque Elohim deseaba preparar un hogar para los Hijos de Yah. • Y ese hogar era un laberinto de geometrías que formaban muchos hogares • dentro del Hogar Único que es el Óvulo Madre.<cite>Fragmento del Génesis Nasarean</cite></div>
   </div>
 </div>
 <button id="toggle" title="Mostrar/ocultar panel (H)">⚙</button>
@@ -789,7 +797,7 @@ void main(){
 
 // ==================== WEBGL SETUP ====================
 const canvas = document.getElementById('c');
-const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true, alpha: false, antialias: false });
+const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' });
 if (!gl) { document.body.innerHTML = '<h2 style="color:#fff;padding:20px">Tu navegador no soporta WebGL 😢</h2>'; throw 'no webgl'; }
 
 function compile(type, src){
@@ -1004,7 +1012,7 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🚇 Pasillo fractal':'🚇 Fractal Corridor','🚇 Pasillo':'🚇 Corridor','📊 FPS y resolución':'📊 FPS & resolution','🔋 Modo ahorro':'🔋 Power-saving mode','Modo ahorro activado: 30 FPS, menos resolución y efectos':'Power-saving on: 30 FPS, lower resolution and effects','Modo ahorro desactivado':'Power-saving off',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','⚡ Mejoras de rendimiento':'⚡ Performance improvements','🚇 Pasillo fractal':'🚇 Fractal Corridor','🚇 Pasillo':'🚇 Corridor','📊 FPS y resolución':'📊 FPS & resolution','🔋 Modo ahorro':'🔋 Power-saving mode','Modo ahorro activado: 30 FPS, menos resolución y efectos':'Power-saving on: 30 FPS, lower resolution and effects','Modo ahorro desactivado':'Power-saving off',
  'Rendimiento bajo: prueba el modo 🔋 ahorro (Herramientas)':'Low performance: try 🔋 power-saving mode (Tools)','🔷 Geometría hiperbólica':'🔷 Hyperbolic Geometry','🔷 Hiperbólico':'🔷 Hyperbolic','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
  'Graves':'Bass','Medios':'Mid','Agudos':'High','Volumen':'Level','➕ Añadir':'➕ Add','Sin modulaciones. Añade una arriba.':'No modulations. Add one above.','Cantidad (%)':'Amount (%)','compases':'bars','Duración en segundos o en compases':'Duration in seconds or bars','🌌 Aurora boreal':'🌌 Aurora Borealis','🕳 Agujero negro':'🕳 Black Hole','🐆 Patrones de Turing':'🐆 Turing Patterns','🔬 Mandelbrot en zoom':'🔬 Mandelbrot Zoom',
  '🌌 Aurora':'🌌 Aurora','🕳 Horizonte':'🕳 Horizon','🐆 Turing':'🐆 Turing','🔬 Zoom':'🔬 Zoom','Escenas':'Scenes','➕ Añadir escena':'➕ Add scene','▶ Reproducir escenas':'▶ Play scenes','⏹ Detener escenas':'⏹ Stop scenes',
@@ -1376,10 +1384,11 @@ const btnAuto = document.getElementById('btnAuto');
 function togglePause(){ paused = !paused; btnPause.textContent = tr(paused ? '▶ Seguir' : '⏸ Pausa'); btnPause.classList.toggle('active', paused); }
 function toggleAuto(){ autoMutate = !autoMutate; btnAuto.classList.toggle('active', autoMutate); autoTimer = 0; }
 function toggleFull(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+// Sin preserveDrawingBuffer el lienzo se vacía al presentarse: cualquier lectura (captura, miniatura, marca de agua) debe hacerse en la cola capQ, que corre justo tras dibujar.
+var capQ = [], wmFrame = null;
+function runCaptures(){ if (wmFrame) wmFrame(); while (capQ.length) capQ.shift()(); }
 function save(){
-  const a = document.createElement('a');
-  a.download = 'akasha_visions_' + Date.now() + '.png';
-  a.href = canvas.toDataURL('image/png'); a.click();
+  capQ.push(() => { const a = document.createElement('a'); a.download = 'akasha_visions_' + Date.now() + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); });
 }
 const panel = document.getElementById('panel');
 const togglePanel = () => {
@@ -1473,13 +1482,12 @@ function toggleRec(btn){
   let src = canvas;
   if (wmOn) {   // marca de agua: se compone en un canvas aparte que es el que se graba
     const wc = document.createElement('canvas'), x = wc.getContext('2d'); wc.width = canvas.width; wc.height = canvas.height; src = wc;
-    const loop = () => {
-      if (!rec) return; x.drawImage(canvas, 0, 0, wc.width, wc.height);
+    wmFrame = () => {
+      if (!rec) { wmFrame = null; return; } x.drawImage(canvas, 0, 0, wc.width, wc.height);
       const fs = Math.round(wc.height * 0.028); x.font = '600 ' + fs + 'px system-ui, sans-serif'; x.textAlign = 'right'; x.textBaseline = 'bottom';
       x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = fs * 0.4; x.fillStyle = 'rgba(255,255,255,.55)';
-      x.fillText('✦ Akasha Visions', wc.width - fs, wc.height - fs * 0.8); requestAnimationFrame(loop);
+      x.fillText('✦ Akasha Visions', wc.width - fs, wc.height - fs * 0.8);
     };
-    requestAnimationFrame(loop);
   }
   const stream = src.captureStream(60);
   recDest.stream.getAudioTracks().forEach(tk => stream.addTrack(tk));
@@ -1500,8 +1508,15 @@ function toggleRec(btn){
 // --- Resolución dinámica y modo seguro ---
 let autoRes = true, lowT = 0, highT = 0, safe = false;
 var lite = false, liteSaved = 1, fpsNow = 0, perfOn = false, slowT = 0, hinted = false;
-var warm = 0, lastDropFps = 0, fpsCap = 99;
+var warm = 0, lastDropFps = 0, fpsCap = 99, stableN = 0, lastQ = -1;
+// Cuando la calidad lleva ~6 s sin cambiar se guarda cuántos píxeles dibuja el equipo con soltura; al abrir de nuevo se parte de ahí (sirve aunque cambie el tamaño de la ventana)
+function saveQuality(){ const d = Math.min(devicePixelRatio || 1, 2), q = +P.quality; try { localStorage.setItem('akasha_quality_v1', JSON.stringify({ rp: innerWidth * d * q * innerHeight * d * q })); } catch (e) {} }
 function adaptRes(fps){
+  adaptCore(fps);
+  if (!autoRes || rec || lite || warm < 3) return;
+  if (+P.quality === lastQ) { if (++stableN === 6) saveQuality(); } else { stableN = 0; lastQ = +P.quality; }
+}
+function adaptCore(fps){
   if (++warm < 3) return;                          // se ignoran los primeros segundos (compilación y arranque)
   if (!autoRes || rec) return;
   const goal = Math.min(lite ? 28 : 55, fpsCap), minQ = 0.35;
@@ -1637,7 +1652,8 @@ function renderLists(){
   fillList('midiPresets', store.midi, n => { for (const k in midiMap) delete midiMap[k]; Object.assign(midiMap, store.midi[n]); persistMidi(); }, n => { delete store.midi[n]; }, 'Sin mapeos MIDI guardados');
 }
 function readName(id){ const el = document.getElementById(id), n = el.value.trim().slice(0, 24); if (!n || n === '__proto__') { el.focus(); return null; } return { el, n }; }
-document.getElementById('upSave').onclick = () => { const r = readName('upName'); if (!r) return; store.visual[r.n] = { ...snapshot(), thumb: thumb() }; saveStore(); renderLists(); r.el.value = ''; };
+document.getElementById('upSave').onclick = () => { const r = readName('upName'); if (!r) return; const nm = r.n; store.visual[nm] = snapshot(); saveStore(); renderLists(); r.el.value = '';
+  capQ.push(() => { if (store.visual[nm]) { store.visual[nm].thumb = thumb(); saveStore(); renderLists(); } }); };
 document.getElementById('mpSave').onclick = () => {
   if (!Object.keys(midiMap).length) { alert(tr('Aún no has asignado controles MIDI (doble clic en un slider y mueve una perilla).')); return; }
   const r = readName('mpName'); if (!r) return; store.midi[r.n] = { ...midiMap }; saveStore(); renderLists(); r.el.value = '';
@@ -1959,12 +1975,19 @@ document.getElementById('instClose').onclick = () => document.getElementById('in
 const qs = new URLSearchParams(location.search), kiosk = qs.has('clean');
 // --- Novedades (se muestran una vez por versión, después del aviso de seguridad) ---
 const NEWS_KEY = 'akasha_news_v5';
+const PERF_KEY = 'akasha_perf_v1';
+function showPerf(){
+  if (kiosk) return;
+  try { if (localStorage.getItem(PERF_KEY)) return; } catch (e) {}
+  document.getElementById('pnews').classList.remove('gone');
+}
+document.getElementById('pnewsClose').onclick = () => { document.getElementById('pnews').classList.add('gone'); try { localStorage.setItem(PERF_KEY, '1'); } catch (e) {} };
 function showNews(){
   if (kiosk) return;
-  try { if (localStorage.getItem(NEWS_KEY)) return; } catch (e) {}
+  try { if (localStorage.getItem(NEWS_KEY)) { showPerf(); return; } } catch (e) {}
   document.getElementById('news').classList.remove('gone');
 }
-document.getElementById('newsClose').onclick = () => { document.getElementById('news').classList.add('gone'); try { localStorage.setItem(NEWS_KEY, '1'); } catch (e) {} };
+document.getElementById('newsClose').onclick = () => { document.getElementById('news').classList.add('gone'); try { localStorage.setItem(NEWS_KEY, '1'); } catch (e) {} showPerf(); };
 
 // --- Gestos táctiles: pellizcar = zoom, girar dos dedos = rotar ---
 let pinch = null;
@@ -2019,7 +2042,11 @@ if (kiosk) {
   if (qs.has('safe')) setSafe(true); if (qs.has('auto')) toggleAuto();
   if (qs.has('mic')) startMic(document.getElementById('btnAudio'));
 }
-if (matchMedia('(pointer: coarse)').matches) setParam('quality', 0.7);   // celulares y tabletas: se parte de una calidad menor
+try {   // calidad inicial: la que recordó este equipo; si no hay, 0.7 en pantallas táctiles
+  const sq = JSON.parse(localStorage.getItem('akasha_quality_v1')), d = Math.min(devicePixelRatio || 1, 2);
+  if (sq && sq.rp > 0) setParam('quality', Math.min(1, Math.max(0.35, +Math.sqrt(sq.rp / (innerWidth * innerHeight * d * d)).toFixed(2))));
+  else if (matchMedia('(pointer: coarse)').matches) setParam('quality', 0.7);
+} catch (e) { if (matchMedia('(pointer: coarse)').matches) setParam('quality', 0.7); }
 if (qs.has('lite')) setLite(true);          // ?lite = modo ahorro · ?fps = contador de FPS
 if (qs.has('fps')) document.getElementById('btnPerf').click();
 applyLang();
@@ -2129,7 +2156,7 @@ function frame(now){
   gl.uniform1f(BU.gt, P.glitch * (safe ? 0.3 : 1)); gl.uniform1f(BU.ps, P.post); gl.uniform1f(BU.bl, lite ? 0 : P.bloom); gl.uniform1f(BU.vg, P.vig); gl.uniform1f(BU.fe, P.lens);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
   gl.useProgram(cp.prog);
-  ti = 1 - ti; restoreMods();
+  ti = 1 - ti; restoreMods(); runCaptures();
 
   // Reproductor: brillo con el beat, espectro y auto-ocultado
   const busy = (canHover && (panel.matches(':hover') || dock.matches(':hover'))) || plist.classList.contains('open') || seeking || dd;
