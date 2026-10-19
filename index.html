@@ -995,10 +995,10 @@ vec3 pn(float k, float i){                     // normales de las caras de cada 
   float g = floor((i - 8.0) / 4.0);             // icosaedro: sus caras apuntan a los vértices del dodecaedro
   return (g < 0.5 ? vec3(0.0, s1 * 0.618034, s2 * 1.618034) : (g < 1.5 ? vec3(s1 * 0.618034, s2 * 1.618034, 0.0) : vec3(s2 * 1.618034, 0.0, s1 * 0.618034))) * 0.57735;
 }
-vec3 solid(vec2 uv, float k, float w){
+vec3 solid(vec2 uv, float k, float w, float sz){
   if (w <= 0.001) return vec3(0.0);
   float cnt = k < 0.5 ? 4.0 : (k < 1.5 ? 6.0 : (k < 2.5 ? 8.0 : (k < 3.5 ? 12.0 : 20.0)));
-  float Rr = (k < 0.5 ? 0.3333 : (k < 2.5 ? 0.5774 : 0.7947)) * (0.55 + 0.12 * k) * (1.0 + 0.05 * u_audio + 0.04 * u_beat);
+  float Rr = (k < 0.5 ? 0.3333 : (k < 2.5 ? 0.5774 : 0.7947)) * (0.55 + 0.12 * k) * sz * (1.0 + 0.05 * u_audio + 0.04 * u_beat);
   vec3 ro = vec3(0.0, 0.0, -3.6), rd = normalize(vec3(uv, 2.6));
   float a = u_time * (0.3 + 0.08 * k) + k;
   ro.xz = rot(a) * ro.xz; rd.xz = rot(a) * rd.xz; ro.yz = rot(a * 0.6 + 0.4) * ro.yz; rd.yz = rot(a * 0.6 + 0.4) * rd.yz;
@@ -1018,7 +1018,7 @@ vec3 solid(vec2 uv, float k, float w){
       float dj = dot(p, pn(k, float(j)));
       if (dj > m1){ m3 = m2; m2 = m1; m1 = dj; } else if (dj > m2){ m3 = m2; m2 = dj; } else if (dj > m3) m3 = dj;
     }
-    col += pal(k * 0.2 + u_time * 0.03) * (smoothstep(0.07, 0.0, m1 - m2) * 1.3 + smoothstep(0.13, 0.0, m1 - m3) * 1.8) * (s == 0 ? 1.0 : 0.55);
+    col += pal(k * 0.2 + u_time * 0.03) * (smoothstep(0.07, 0.0, m1 - m2) * 0.95 + smoothstep(0.13, 0.0, m1 - m3) * 1.3) * (s == 0 ? 1.0 : 0.55);
   }
   col += pal(k * 0.2 + 0.5) * (0.06 + 0.2 * max(dot(nin, normalize(vec3(0.4, 0.7, -0.6))), 0.0));
   return col * w * (0.6 + spec(k * 0.12) * 1.6);
@@ -1026,7 +1026,7 @@ vec3 solid(vec2 uv, float k, float w){
 vec3 danza(vec2 uv){
   float g = u_gen, nest = clamp(g - 5.0, 0.0, 1.0), r = length(uv);
   vec3 col = vec3(0.0);
-  for (int k = 0; k < 5; k++) col += solid(uv, float(k), max(clamp(1.0 - abs(g - float(k) - 1.0), 0.0, 1.0), nest));
+  for (int k = 0; k < 5; k++) col += solid(uv, float(k), max(clamp(1.0 - abs(g - float(k) - 1.0), 0.0, 1.0), nest) * (1.0 - 0.45 * nest), mix(1.25, 1.0, nest));   // solo: más grande; juntos: más tenues
   col += pal(0.7) * nest * (0.012 / (abs(r - 0.919 * (1.0 + 0.02 * u_beat)) + 0.012) + 0.02 * exp(-r * r * 2.0));   // la Esfera
   float wp = max(clamp(1.0 - g, 0.0, 1.0), clamp(g - 6.0, 0.0, 1.0));                                            // el Primer Punto
   return col + pal(0.1 + u_time * 0.05) * wp * (0.03 + u_audio * 0.1) / (dot(uv, uv) * 30.0 + 0.02);
