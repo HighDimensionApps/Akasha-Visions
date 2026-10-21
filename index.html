@@ -298,6 +298,8 @@
     <button id="btnAutoUI" class="active">🙈 Auto-ocultar</button>
     <button id="btnInstall">📲 Instalar app</button>
     <button id="btnFxOff">🧼 Quitar filtros</button>
+    <button id="btnFixVid">🔧 Reparar video</button>
+    <input type="file" id="fixFile" accept="video/mp4,.mp4" style="display:none">
     <button id="btnWM" class="active">🏷 Marca de agua</button>
     <button id="btnSecond">🪟 Segunda pantalla</button>
     <button id="btnPerf">📊 FPS y resolución</button>
@@ -1460,7 +1462,7 @@ function randomize(){
 const TR = {
  'Modo':'Mode','🌌 Fractal Neón':'🌌 Neon Fractal','🌊 Plasma Líquido':'🌊 Liquid Plasma','🕳️ Túnel Infinito':'🕳️ Infinite Tunnel',
  '🔮 Julia animado':'🔮 Animated Julia','〰️ Figuras de Chladni':'〰️ Chladni Figures','🫧 Voronoi líquido':'🫧 Liquid Voronoi',
- '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','△ Expansión de la Trinidad':'△ Expansion of the Trinity','💞 Jahday y Jahnah':'💞 Jahday and Jahnah','△ Trinidad':'△ Trinity','💞 Danza':'💞 Dance','🔺 Danza de los Cinco Poliedros':'🔺 Dance of the Five Polyhedra','🔺 Poliedros':'🔺 Polyhedra','🧩 Teselas de Truchet':'🧩 Truchet Tiles','🖋 Tinta y mármol':'🖋 Ink & Marble','🧩 Truchet':'🧩 Truchet','🖋 Mármol':'🖋 Marble','🌱 Génesis de la vida':'🌱 Genesis of Life','🧘 Chakras':'🧘 Chakras','🔱 Sri Yantra':'🔱 Sri Yantra','📈 Líneas apiladas':'📈 Stacked Lines','🌊 Cascada de espectro 3D':'🌊 3D Spectrum Waterfall','🌆 Ciudad de neón':'🌆 Neon City','🌀 Espiral hipnótica':'🌀 Hypnotic Spiral','🚀 Salto al hiperespacio':'🚀 Hyperspace Jump',
+ '🌼 Geometría sagrada':'🌼 Sacred Geometry','🌠 Partículas de flujo':'🌠 Flow Particles','🌌 Universo en expansión':'🌌 Expanding Universe','🌠 Flujo':'🌠 Flow','📲 Instalar app':'📲 Install app','📲 Instalar Akasha Visions':'📲 Install Akasha Visions','Cerrar':'Close','🔧 Reparar video':'🔧 Repair video','Elige un video MP4 grabado con la app.':'Pick an MP4 video recorded with the app.','Video reparado: duración ':'Video repaired: duration ','No se pudo calcular la duración de este video.':'Could not work out this video’s duration.','△ Expansión de la Trinidad':'△ Expansion of the Trinity','💞 Jahday y Jahnah':'💞 Jahday and Jahnah','△ Trinidad':'△ Trinity','💞 Danza':'💞 Dance','🔺 Danza de los Cinco Poliedros':'🔺 Dance of the Five Polyhedra','🔺 Poliedros':'🔺 Polyhedra','🧩 Teselas de Truchet':'🧩 Truchet Tiles','🖋 Tinta y mármol':'🖋 Ink & Marble','🧩 Truchet':'🧩 Truchet','🖋 Mármol':'🖋 Marble','🌱 Génesis de la vida':'🌱 Genesis of Life','🧘 Chakras':'🧘 Chakras','🔱 Sri Yantra':'🔱 Sri Yantra','📈 Líneas apiladas':'📈 Stacked Lines','🌊 Cascada de espectro 3D':'🌊 3D Spectrum Waterfall','🌆 Ciudad de neón':'🌆 Neon City','🌀 Espiral hipnótica':'🌀 Hypnotic Spiral','🚀 Salto al hiperespacio':'🚀 Hyperspace Jump',
  '🌱 Génesis':'🌱 Genesis','🔱 Yantra':'🔱 Yantra','📈 Pulsar':'📈 Pulsar','🌊 Cascada':'🌊 Waterfall','🌆 Neón':'🌆 Neon','🌀 Espiral':'🌀 Spiral','🚀 Salto':'🚀 Jump','Color por nota':'Color by note','Drops: sin efecto':'Drops: no effect','Drops: destello':'Drops: flash','Drops: destello + cambio de escena':'Drops: flash + scene change','Subida':'Build-up','🌻 Filotaxia (Fibonacci)':'🌻 Phyllotaxis (Fibonacci)','🍩 Toro energético':'🍩 Energy Torus','🔔 Cimática de Bessel':'🔔 Bessel Cymatics','🌻 Girasol':'🌻 Sunflower','🍩 Toro':'🍩 Torus','🔔 Cimática':'🔔 Cymatics','⚡ Mejoras de rendimiento':'⚡ Performance improvements','🚇 Pasillo fractal':'🚇 Fractal Corridor','🚇 Pasillo':'🚇 Corridor','📊 FPS y resolución':'📊 FPS & resolution','🔋 Modo ahorro':'🔋 Power-saving mode','Modo ahorro activado: 30 FPS, menos resolución y efectos':'Power-saving on: 30 FPS, lower resolution and effects','Modo ahorro desactivado':'Power-saving off',
  'Rendimiento bajo: prueba el modo 🔋 ahorro (Herramientas)':'Low performance: try 🔋 power-saving mode (Tools)','🔷 Geometría hiperbólica':'🔷 Hyperbolic Geometry','🔷 Hiperbólico':'🔷 Hyperbolic','🚢 Burning Ship':'🚢 Burning Ship','🌀 Fractal de Newton':'🌀 Newton Fractal','🚢 Barco':'🚢 Ship','🌀 Newton':'🌀 Newton','Modulación':'Modulation','Mezcla':'Blend','Modo B (mezcla)':'Mode B (blend)','Mezcla con modo B':'Blend with mode B',
  'Graves':'Bass','Medios':'Mid','Agudos':'High','Volumen':'Level','➕ Añadir':'➕ Add','Sin modulaciones. Añade una arriba.':'No modulations. Add one above.','Cantidad (%)':'Amount (%)','compases':'bars','Duración en segundos o en compases':'Duration in seconds or bars','🌌 Aurora boreal':'🌌 Aurora Borealis','🕳 Agujero negro':'🕳 Black Hole','🐆 Patrones de Turing':'🐆 Turing Patterns','🔬 Mandelbrot en zoom':'🔬 Mandelbrot Zoom',
@@ -2025,7 +2027,104 @@ function addRipple(cx, cy){
 }
 
 // --- Grabación de video + audio ---
-let rec = null, wmOn = true;
+// Corrige la duración y las marcas de tiempo de las grabaciones de MediaRecorder (MP4 fragmentado y WebM)
+function fixMp4(buf, wallSec){
+  const dv = new DataView(buf), u8 = new Uint8Array(buf), N = buf.byteLength;
+  const typ = o => String.fromCharCode(u8[o + 4], u8[o + 5], u8[o + 6], u8[o + 7]);
+  const g32 = o => dv.getUint32(o), g64 = o => dv.getUint32(o) * 4294967296 + dv.getUint32(o + 4);
+  const s32 = (o, v) => dv.setUint32(o, Math.max(0, Math.min(4294967295, Math.round(v))));
+  const s64 = (o, v) => { v = Math.max(0, Math.round(v)); dv.setUint32(o, Math.floor(v / 4294967296)); dv.setUint32(o + 4, v % 4294967296); };
+  const each = (s, e, cb) => { let o = s; while (o + 8 <= e) { let sz = g32(o), h = 8; if (sz === 1) { sz = g64(o + 8); h = 16; } else if (sz === 0) sz = e - o; if (sz < h || o + sz > e) break; cb(typ(o), o + h, o + sz); o += sz; } };
+  const put = (d, v) => d && (d.v ? s64(d.o, v) : s32(d.o, v));
+  let mvTs = 1000, mvDur = null; const trk = {}, frag = {}, tfra = [];
+  each(0, N, (t, b, e) => {
+    if (t === 'moov') each(b, e, (t2, b2, e2) => {
+      if (t2 === 'mvhd') { const v = u8[b2]; mvTs = g32(b2 + (v ? 20 : 12)); mvDur = { o: b2 + (v ? 24 : 16), v }; }
+      if (t2 === 'trak') {
+        const tr = {};
+        each(b2, e2, (t3, b3, e3) => {
+          if (t3 === 'tkhd') { const v = u8[b3]; tr.id = g32(b3 + (v ? 20 : 12)); tr.td = { o: b3 + (v ? 28 : 20), v }; }
+          if (t3 === 'mdia') each(b3, e3, (t4, b4) => { if (t4 === 'mdhd') { const v = u8[b4]; tr.ts = g32(b4 + (v ? 20 : 12)); tr.md = { o: b4 + (v ? 24 : 16), v }; } });
+        });
+        if (tr.id) trk[tr.id] = tr;
+      }
+    });
+    if (t === 'moof') each(b, e, (t2, b2, e2) => {
+      if (t2 !== 'traf') return;
+      let id = 0; const fr = { tfdt: null, durs: [] };
+      each(b2, e2, (t3, b3) => {
+        if (t3 === 'tfhd') id = g32(b3 + 4);
+        if (t3 === 'tfdt') { const v = u8[b3]; fr.tfdt = { o: b3 + 4, v, t: v ? g64(b3 + 4) : g32(b3 + 4) }; }
+        if (t3 === 'trun') {
+          const fl = g32(b3) & 0xffffff, n = g32(b3 + 4); let p = b3 + 8; if (fl & 1) p += 4; if (fl & 4) p += 4;
+          const step = ((fl & 0x100) ? 4 : 0) + ((fl & 0x200) ? 4 : 0) + ((fl & 0x400) ? 4 : 0) + ((fl & 0x800) ? 4 : 0);
+          if (fl & 0x100) for (let k = 0; k < n; k++) fr.durs.push(p + k * step);
+        }
+      });
+      if (id) (frag[id] = frag[id] || []).push(fr);
+    });
+    if (t === 'mfra') each(b, e, (t2, b2) => { if (t2 === 'tfra') tfra.push({ id: g32(b2 + 4), v: u8[b2], lens: g32(b2 + 8), n: g32(b2 + 12), o: b2 + 16 }); });
+  });
+  let D = 0;
+  for (const id in frag) {
+    const tr = trk[id]; if (!tr || !tr.ts) continue;
+    const ts = tr.ts, fs = frag[id], first = fs[0].tfdt ? fs[0].tfdt.t : 0, rebase = first / ts > 2 ? first : 0;   // un inicio de más de 2 s es un error del grabador
+    if (rebase) {
+      fs.forEach(f => { if (f.tfdt) put(f.tfdt, f.tfdt.t - rebase); });
+      tfra.forEach(t => {
+        if (t.id !== +id) return;
+        const esz = (t.v ? 16 : 8) + ((t.lens >> 4 & 3) + 1) + ((t.lens >> 2 & 3) + 1) + ((t.lens & 3) + 1);
+        for (let k = 0; k < t.n; k++) { const o = t.o + k * esz; if (t.v) s64(o, g64(o) - rebase); else s32(o, g32(o) - rebase); }
+      });
+    }
+    const offs = fs.flatMap(f => f.durs); let dt = 0;
+    if (offs.length) {
+      const sorted = offs.map(g32).sort((a, b) => a - b), med = sorted[sorted.length >> 1]; let tot = 0;
+      offs.forEach(o => { let d = g32(o); if (med > 0 && d > 5 * ts) { dv.setUint32(o, med); d = med; } tot += d; });   // un fotograma de más de 5 s también es un error
+      dt = tot / ts;
+    }
+    if (!isFinite(dt) || dt <= 0 || (wallSec && (dt > wallSec * 1.5 + 2 || dt < wallSec * 0.5))) dt = wallSec || dt;
+    put(tr.td, dt * mvTs); put(tr.md, dt * ts); D = Math.max(D, dt);
+  }
+  if (D) put(mvDur, D * mvTs);
+  fixMp4.last = D;
+  return buf;
+}
+
+function fixWebm(buf, wallSec){
+  const u8 = new Uint8Array(buf);
+  const vint = o => { const f = u8[o]; let n = 1; while (n <= 8 && !(f & (0x80 >> (n - 1)))) n++; let v = f & ((0x80 >> (n - 1)) - 1); for (let k = 1; k < n; k++) v = v * 256 + u8[o + k]; return [n, v]; };
+  const eid = o => { const f = u8[o]; let n = 1; while (n <= 4 && !(f & (0x80 >> (n - 1)))) n++; let v = 0; for (let k = 0; k < n; k++) v = v * 256 + u8[o + k]; return [n, v]; };
+  const enc = (v, n) => { const a = new Array(n); for (let k = n - 1; k >= 0; k--) { a[k] = v % 256; v = Math.floor(v / 256); } a[0] |= 0x80 >> (n - 1); return a; };
+  try {
+    let o = 0, [il, id] = eid(0), [sl, sz] = vint(il);
+    o = il + sl + sz; [il, id] = eid(o); if (id !== 0x18538067) return buf;
+    const [ssl, segSize] = vint(o + il), segUnknown = segSize === Math.pow(2, 7 * ssl) - 1, segSizeOff = o + il;
+    let p = o + il + ssl, info = -1, infoIl = 0, infoSl = 0, infoSz = 0;
+    for (let k = 0; k < 40 && p < u8.length; k++) {
+      const [i1, id1] = eid(p), [s1, sz1] = vint(p + i1);
+      if (id1 === 0x1549A966) { info = p; infoIl = i1; infoSl = s1; infoSz = sz1; break; }
+      if (sz1 === Math.pow(2, 7 * s1) - 1) break; p += i1 + s1 + sz1;
+    }
+    if (info < 0) return buf;
+    let q = info + infoIl + infoSl, end = q + infoSz, scale = 1000000;
+    while (q < end) {   // ¿ya trae duración? ¿qué escala de tiempo usa?
+      const [i2, id2] = eid(q), [s2, sz2] = vint(q + i2);
+      if (id2 === 0x4489) return buf;
+      if (id2 === 0x2AD7B1) { scale = 0; for (let k = 0; k < sz2; k++) scale = scale * 256 + u8[q + i2 + s2 + k]; }
+      q += i2 + s2 + sz2;
+    }
+    const dur = new DataView(new ArrayBuffer(8)); dur.setFloat64(0, wallSec * 1e9 / scale);
+    const el = [0x44, 0x89, 0x88, ...new Uint8Array(dur.buffer)];   // elemento Duration (float64)
+    const out = new Uint8Array(u8.length + el.length); out.set(u8.subarray(0, end), 0); out.set(el, end); out.set(u8.subarray(end), end + el.length);
+    out.set(enc(infoSz + el.length, infoSl), info + infoIl);
+    if (!segUnknown) out.set(enc(segSize + el.length, ssl), segSizeOff);
+    return out.buffer;
+  } catch (e) { return buf; }
+}
+
+
+let rec = null, wmOn = true, recT0 = 0;
 function toggleRec(btn){
   if (rec) { rec.stop(); return; }
   if (!window.MediaRecorder || !canvas.captureStream) { alert(tr('Tu navegador no puede grabar video.')); return; }
@@ -2046,14 +2145,18 @@ function toggleRec(btn){
   const chunks = [];
   rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8e6 });
   rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
-  rec.onstop = () => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(chunks, { type: (mime || 'video/webm').split(';')[0] }));
-    a.download = 'akasha_visions_' + Date.now() + ((mime || '').startsWith('video/mp4') ? '.mp4' : '.webm'); a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  rec.onstop = async () => {
+    // Chrome no escribe bien la duración ni las marcas de tiempo: se corrigen antes de guardar el archivo
+    const type = (mime || 'video/webm').split(';')[0], wall = (performance.now() - recT0) / 1000;
     rec = null; btn.classList.remove('active'); btn.textContent = tr('⏺ Grabar video');
+    let blob = new Blob(chunks, { type });
+    try { const buf = await blob.arrayBuffer(); blob = new Blob([type === 'video/mp4' ? fixMp4(buf, wall) : fixWebm(buf, wall)], { type }); } catch (e) {}
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'akasha_visions_' + Date.now() + (type === 'video/mp4' ? '.mp4' : '.webm'); a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   };
-  rec.start(1000); btn.classList.add('active'); btn.textContent = tr('⏹ Detener grabación');
+  recT0 = performance.now(); rec.start(1000); btn.classList.add('active'); btn.textContent = tr('⏹ Detener grabación');
 }
 
 // --- Resolución dinámica y modo seguro ---
@@ -2360,6 +2463,14 @@ function setLite(v){
 document.getElementById('btnLite').onclick = () => setLite(!lite);
 document.getElementById('btnPerf').onclick = e => { perfOn = !perfOn; perfEl.classList.toggle('on', perfOn); perfEl.textContent = '…'; e.currentTarget.classList.toggle('active', perfOn); };
 document.getElementById('dropAct').onchange = e => { dropMode = +e.target.value; };
+document.getElementById('btnFixVid').onclick = () => document.getElementById('fixFile').click();
+document.getElementById('fixFile').onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  if (!/\.mp4$/i.test(f.name)) { toast(tr('Elige un video MP4 grabado con la app.')); return; }
+  const out = fixMp4(await f.arrayBuffer(), 0), a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([out], { type: 'video/mp4' })); a.download = f.name.replace(/\.mp4$/i, '') + '_reparado.mp4'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  const d = fixMp4.last || 0; toast(d ? tr('Video reparado: duración ') + Math.floor(d / 60) + ':' + String(Math.round(d % 60)).padStart(2, '0') : tr('No se pudo calcular la duración de este video.'));
+};
 document.getElementById('btnWM').onclick = e => { wmOn = !wmOn; e.currentTarget.classList.toggle('active', wmOn); };
 renderScenes();
 
